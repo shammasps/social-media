@@ -58,7 +58,7 @@ const storage = multer.diskStorage({
   
     try {
       await User.findByIdAndUpdate(userId, { profilePicture: newPhotoFilename });
-      res.redirect("/profileEdit")
+      res.redirect("/profile/profileEdit")
     } catch (error) {
       console.error(error);
       res.status(500).send('Error updating user profile photo.');
