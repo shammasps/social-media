@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/profileeditStyle.css">
+</head>
+<body>
+    
+
+    <div class="container-xl px-4 mt-4">
+    <!-- Account page navigation-->
+    <nav class="nav nav-borders">
+        <a class="nav-link active ms-0" href="https://www.bootdey.com/snippets/view/bs5-edit-profile-account-details" target="__blank">Profile</a>
+        <a class="nav-link" href="https://www.bootdey.com/snippets/view/bs5-profile-billing-page" target="__blank">Billing</a>
+        <a class="nav-link" href="https://www.bootdey.com/snippets/view/bs5-profile-security-page" target="__blank">Security</a>
+        <a class="nav-link" href="https://www.bootdey.com/snippets/view/bs5-edit-notifications-page"  target="__blank">Notifications</a>
+    </nav>
+    <hr class="mt-0 mb-4">
+    <div class="row">
+        <div class="col-xl-4">
+            <!-- Profile picture card-->
+            <div class="card mb-4 mb-xl-0">
+                <div class="card-header">Profile Picture</div>
+                <div class="card-body text-center">
+                    <!-- Profile picture image-->
+                    
+                    <img id="filePreview" class="img-account-profile rounded mb-2" src=../{{user.profilePicture}} alt="">
+                    
+                    <!-- Profile picture help block-->
+                    <div class="small font-italic text-muted mb-4">JPG or PNG</div>
+                    <!-- Profile picture upload button-->
+                    <form action="/profile/uploadPhoto" method="post" enctype="multipart/form-data">
+                        <label for="files" class="btn">Select Image</label>
+                    <input type="file" id="files" style="visibility:hidden;" class="form-control-file"
+                     name="profilePhoto" accept="image/*">                    
+                    <button type="submit" class="btn btn-primary">Upload new image</button>                    
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-8">
+            <!-- Account details card-->
+            <div class="card mb-4">
+                <div class="card-header">Account Details</div>
+                <div class="card-body">
+                    <form action="/profile/update" method="post">
+                        <!-- Form Group (username)-->
+                        <div class="mb-3">
+                            <label class="small mb-1" for="inputUsername">Username (how your name will appear to other users on the site)</label>
+                            <input class="form-control" id="inputUsername" type="text" name="username" placeholder="Enter your username" value="">
+                        </div>
+                       
+                        <!-- Form Row-->
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (phone number)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputPhone">Phone number</label>
+                                <input class="form-control" id="inputPhone" type="tel" name="phone" placeholder="Enter your phone number" value="">
+                            </div>
+                            <!-- Form Group (birthday)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputBirthday">Birthday</label>
+                                <input class="form-control" id="inputBirthday" type="text" name="birthday" placeholder="00/00/0000" value="">
+                            </div>
+                        </div>
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (first name)-->
+                            <div class="col-md-12">
+                                 <label for="exampleFormControlTextarea1" class="form-label">About Me</label>
+                                 <textarea class="form-control" id="exampleFormControlTextarea1" type="text" name="aboutMe" placeholder="About Me" rows="3"></textarea>
+                            </div>
+                        </div>
+
+
+                        <!-- Save changes button-->
+                        <button class="btn btn-primary" type="submit">Save changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+  document.getElementById('files').addEventListener('change', function () {
+    const fileInput = this;
+    const filePreview = document.getElementById('filePreview');
+    const files = fileInput.files;
+
+    if (files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        filePreview.src = e.target.result;
+      };
+      reader.readAsDataURL(files[0]);
+    } else {
+      filePreview.src = '';
+    }
+  });
+</script>
+
+
+</body>
+</html>

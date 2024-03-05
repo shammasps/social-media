@@ -1,0 +1,65 @@
+
+
+<div class="container mt-5">
+  <div class="card">
+    <div class="card-header">
+      <h5 class="mb-0">Create Post</h5>
+    </div>
+    <div class="card-body">
+    <form action="savePost" method="post" enctype="multipart/form-data">
+
+      <div class="form-group">
+          <label for="title">Title</label>
+          <input type="text" class="form-control" id="title" name="title" placeholder="Title">
+        </div>
+
+        <!-- File Upload Option -->
+        <div class="form-group">
+          <label for="fileUpload">File Upload (Image/Video)</label>
+          <input type="file" class="form-control-file" name="upload" id="fileUpload" accept="image/*,video/*">        </div>
+
+        <!-- File Preview (No JavaScript) -->
+        <div class="form-group">
+          <label for="filePreview">File Preview</label>
+          <img id="filePreview" class="img-fluid" style="height: 500px;" alt="File Preview">
+        </div>
+
+        <!-- Description Textarea -->
+        <div class="form-group">
+          <label for="postDescription">Description</label>
+          <textarea class="form-control" id="postDescription" name="description" rows="3" placeholder="Write your post description here..."></textarea>
+        </div>
+
+        <!-- Tag Option -->
+        <div class="form-group">
+          <label for="postTags">Tags</label>
+          <input type="text" class="form-control" id="postTags" name="tags" placeholder="Add tags (comma separated)">
+        </div>
+
+        <!-- Post and Cancel Buttons -->
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary">Post</button>
+          <button type="button" class="btn btn-secondary ml-2">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById('fileUpload').addEventListener('change', function () {
+    const fileInput = this;
+    const filePreview = document.getElementById('filePreview');
+    const files = fileInput.files;
+
+    if (files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        filePreview.src = e.target.result;
+      };
+      reader.readAsDataURL(files[0]);
+    } else {
+      filePreview.src = '';
+    }
+  });
+</script>
