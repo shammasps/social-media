@@ -21,16 +21,21 @@ router.post('/signup', async (req,res)=>{
     const hashedPassword = await bcrypt.hash(newUser.password, saltRounds);
     newUser.password=hashedPassword;
     // Check if the email already exists
-  const existingUser = await User.findOne({ email: newUser.email });
+  const existingUser = await User.findOne({ email: newUser.email});
+  const existingUserWithUsername = await User.findOne({ username: newUser.username });
 
   if (existingUser) {
     // If the email exists, return an error response
     return res.status(400).json({ error: 'Email already exists' });
   }
-    await newUser.save();
+  if (existingUserWithUsername) {
+    // If the username exists, return an error response
+    return res.status(400).json({ error: 'Username already exists' });
+  }
+    await newUser.save(); 
     console.log(newUser);
     
-    res.redirect('/post');
+    res.redirect('/');
   } catch (error) {
     res.status(500).json({ error: 'Error creating item' });
   }
@@ -84,7 +89,9 @@ router.get('/messagePage',(req,res)=>{
 })
 
 router.get('/usersList', async (req, res) => {
+
   try {
+    
     const users = await User.find();
     res.render('usersList', { layout: 'layout',users });
   } catch (error) {

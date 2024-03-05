@@ -67,7 +67,9 @@ const storage = multer.diskStorage({
 
   router.post('/update', async (req, res) => {
     try {
-      const userId = req.user.id; // Assuming you have user authentication middleware
+      const sessionUser = req.session.user;
+      const userId = sessionUser._id;
+       // Assuming you have user authentication middleware
       const { username, phone, birthday, aboutMe } = req.body;
   
       // Update user details
