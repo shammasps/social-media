@@ -1,11 +1,13 @@
 var express = require('express');
 var router = express.Router();
 const Post = require('../models/postModel');
+const moment = require('moment');
 
 console.log("post.js is loaded");
 const path = require('path'); // Add this line to import the 'path' module
 
 const multer = require('multer');
+const { post } = require('./profile');
 /* GET users listing. */
 
 
@@ -15,15 +17,20 @@ const multer = require('multer');
 router.get('/', async function(req, res, next) {
   try {
 
+    const sessionUser = req.session.user;
+    const userId = sessionUser._id;
     // get all posts from database (mongodb)
     const posts = await Post.find().sort({ postedDate: -1 });
 
+
     //set isImage and isVideo in that posts
     const postsWithMediaInfo = posts.map(post => {
+    
       return {
         ...post.toObject(),
         isImage: post.imageUrl.endsWith('.jpg') || post.imageUrl.endsWith('.png'),
         isVideo: post.imageUrl.endsWith('.mp4') || post.imageUrl.endsWith('.webm'),
+       
       };
     });
 
@@ -35,9 +42,6 @@ router.get('/', async function(req, res, next) {
     res.status(500).json({ error: 'Error fetching posts' });
   }
 });
-
-
-
 
 
 

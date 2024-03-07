@@ -12,7 +12,7 @@
     <div class="container" style="margin-top: 6%">
     <div class="row">
         <div class="col-md-8">
-          <form action="/searchUsers" method="post">
+          {{!-- <form action="/searchUsers" method="post">
             <div class="input-group">
               <div class="form-outline" data-mdb-input-init>
                 <input type="search" id="form1" class="form-control" name="searchTerm" placeholder="Search" value="{{ searchTerm }}">
@@ -21,7 +21,7 @@
               <i class="fa fa-search " aria-hidden="true"></i>
               </button>
             </div>
-            </form>
+            </form> --}}
 
             {{!-- Display the list of users --}}
              
@@ -38,13 +38,32 @@
                   </div>
                   <div class="col-md-7 col-sm-7">
                 
-                    <h5><a href="#" class="profile-link">{{username}}</a></h5>
-                    <p>Software Engineer</p>
-                    <p class="text-muted">500m away</p>
+        <h5><a href="/profile?profileUserId={{_id}}" class="profile-link">{{username}}</a></h5>
+                    <p>{{aboutMe}}</p>
+                    {{!-- <p class="text-muted">500m away</p> --}}
                     
                   </div>
                   <div class="col-md-3 col-sm-3">
-                    <button class="btn btn-primary pull-right">Add Friend</button>
+                  
+                    {{#if isFollower}}
+                    <form action="/removeFollower" method="post">
+                    <input type="hidden" name="followerId" value={{_id}} />
+                    <button type="submit" class="btn btn-primary pull-right">Unfollow</button>
+                    </form>
+                      {{else}}
+                        {{#if isFollowingMe}}
+                     <form action="/addFollower" method="post">
+                    <input type="hidden" name="followerId" value={{_id}} />
+                    <button type="submit" class="btn btn-primary pull-right">Follow back</button>
+                    </form>
+                     {{else}}
+                    <form action="/addFollower" method="post">
+                    <input type="hidden" name="followerId" value={{_id}} />
+                    <button type="submit" class="btn btn-primary pull-right">Follow</button>
+                    </form>
+                    {{/if}}
+                     {{/if}}
+                    
                   </div>
                 </div>
               </div>

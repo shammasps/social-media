@@ -16,7 +16,7 @@
 
 <header>
     <div>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light  fixed-top  ">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light text-dark  fixed-top  ">
   <a class="navbar-brand" href="#">
     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCCKj7ahyJQElv7myF1Ab9Gv-qdTq6tRopMoteb2cC4g&s" width="30" height="30" class="d-inline-block align-top" alt="Your Logo">
     Sports Club
@@ -25,25 +25,23 @@
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent" style="margin-left: 30%"  >
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <a class="nav-link" href="/post"></i> Home</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/post/showcreatePost"> Create Post</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/profile"> My Profile</a>
-      </li>
-      {{!-- <li class="nav-item">
-        <a class="nav-link" href="#"> </a>
-      </li> --}}
+  <div class="collapse navbar-collapse" id="navbarSupportedContent" style="margin-left: 42%"  >
+    <ul class="navbar-nav mr-auto text-dark">
+     
+      
+      <form action="/searchUsers" method="post">
+        <div class="input-group">
+          <div class="form-outline" data-mdb-input-init>
+            <input type="search" id="form1" class="form-control" name="searchTerm" placeholder="Search"
+              value="{{ searchTerm }}">
+          </div>
+          <button type="submit  " class="btn btn-primary" style="height: fit-content;" data-mdb-ripple-init>
+            <i class="fa fa-search " aria-hidden="true"></i>
+          </button>
+        </div>
+      </form>
       <li class="nav-item">
         <a class="nav-link" href="#"> My Club</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/messagePage"> Messages</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/"> Log out</a>
@@ -67,6 +65,9 @@
   </a>
   <a href="/usersList" style="color: black;">
   <i class="fa fa-search fa-2x ml-4" aria-hidden="true"></i>
+  </a>
+  <a href="/notification" style="color: black;">
+  <i class="fa fa-bell fa-2x ml-4" aria-hidden="true"></i>
   </a>
   <a href="/messagePage" style="color: black;">
   <i class="fa fa-comment fa-2x ml-4" aria-hidden="true"></i>

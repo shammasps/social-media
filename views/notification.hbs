@@ -1,0 +1,65 @@
+<!-- notification.hbs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications</title>
+    <link rel="stylesheet" href="/stylesheets/usersList.css">
+</head>
+<body>
+  
+
+    <div class="container" style="margin-top: 6%">
+        {{#each top10Followers}}
+        <div class="row">
+            <div class="col-md-8">
+                {{!-- Display the list of users --}}
+    
+                <!-- Render user information -->
+                <div class="nearby-user">
+    
+                    <div class="row">
+                        <div class="col-md-2 col-sm-2">
+                            <img src="{{profilePicture}}" alt="{{userId}} Profile Photo" class="profile-photo-lg">
+                            {{!-- <span>{{followerName}} - {{formatDate followedOn}}</span> --}}
+                        </div>
+                        <div class="col-md-7 col-sm-7">
+    
+                            <h5><a href="#" class="profile-link">{{followerName}}</a></h5>
+                            <p>{{formatDate followedOn}}</p>
+                            <p>{{user.aboutMe}}</p>
+                            {{!-- <p class="text-muted">500m away</p> --}}
+    
+                        </div>
+                        <div class="col-md-3 col-sm-3">
+    
+                            {{#if isAlreadyFollowing}}
+                            <form action="/removeFollower" method="post">
+                                <input type="hidden" name="followerId" value={{userId}} />
+                                <button type="submit" class="btn btn-primary pull-right">Unfollow</button>
+                            </form>
+                            {{else}}
+                            <form action="/addFollower" method="post">
+                                <input type="hidden" name="followerId" value={{userId}} />
+                                <button type="submit" class="btn btn-primary pull-right">Follow back</button>
+                            </form>   
+                            {{/if}}   
+                        </div>
+                    </div>
+                </div>   
+            </div>
+        </div>
+        {{/each}}
+    </div>
+
+
+    <script>
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+    </script>
+</body>
+</html>

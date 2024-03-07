@@ -13,7 +13,11 @@ const User = mongoose.model('User',
     profilePicture: String,
     phone: String,
     birthday:String,
-    aboutMe:String
+    aboutMe:String,
+    followerList: [{
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        followedOn: { type: Date, default: Date.now }
+      }]
 });
 
   

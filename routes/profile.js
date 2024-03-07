@@ -1,21 +1,38 @@
 
 var express = require('express');
 var router = express.Router();
-
 const User = require('../models/userModel');
+const Post = require('../models/postModel');
 const multer = require('multer');
 const path = require('path');
 console.log("profilecheck");
 
 // Route to render the profile page
 router.get('/', async (req, res) => {
-  console.log(req.session.user)
+  
+  const { profileUserId } = req.query;
   const sessionUser = req.session.user;
-    const userId = sessionUser._id;
+  const userId = profileUserId ? profileUserId : sessionUser._id;
 
     const user = await User.findOne({_id:userId});
     user.password = ""; // dont sent passworkd to UI
-    res.render('profile', { layout: 'layout' , user:user });
+    const username = sessionUser.username;
+    // get all posts from database (mongodb)
+    const posts = await Post.find({postedBy:username}).sort({ postedDate: -1 });
+
+    //set isImage and isVideo in that posts
+    const postsWithMediaInfo = posts.map(post => {
+      return {
+        ...post.toObject(),
+        isImage: post.imageUrl.endsWith('.jpg') || post.imageUrl.endsWith('.png'),
+        isVideo: post.imageUrl.endsWith('.mp4') || post.imageUrl.endsWith('.webm'),
+      };
+    });
+    var following = user.followerList?.length ?? 0;
+    var followers = await (await myfollowers(req,res,10000)).length;
+    var isMyProfile = profileUserId && profileUserId.toString() == sessionUser._id.toString()
+
+    res.render('profile', { layout: 'layout' , user:user,myPost:postsWithMediaInfo , following, followers, isMyProfile});
 });
 
 // Route to render the profile edit page
@@ -86,5 +103,44 @@ const storage = multer.diskStorage({
       res.status(500).send('Error updating user details.');
     }
   });
+
+
+  
+async function myfollowers(req, res, total){
+  const sessionUser = req.session.user;
+  const userId = sessionUser._id;
+  const me = await User.findById(userId);
+
+  // Find users who are following the logged-in user
+  const followersOfLoggedInUser = await User.find({ "followerList.userId": userId });
+
+  // Sort followerList based on followedOn date in descending order for each user
+  const followersWithSortedLists = followersOfLoggedInUser.map(user => ({
+    ...user.toObject(),
+    followerList: user.followerList.sort((a, b) => b.followedOn - a.followedOn)
+  }));
+
+  // Flatten the sorted follower lists and take the top 10
+  const allFollowers = followersWithSortedLists.flatMap(user => 
+    user.followerList.map(follower => ({ follower, user }))
+  );
+  //const sortedFollowers = allFollowers.sort((a, b) => b.follower.followedOn - a.follower.followedOn);
+  const top10Followers = allFollowers.slice(0, total);
+
+ const followersWithData= top10Followers.map(x=>{
+    return {
+      userId: x.user._id,
+      followedOn: x.follower.followedOn,
+      profilePicture: x.user.profilePicture,
+      followerName: x.user.username,
+      isAlreadyFollowing:me?.followerList.find(y=> y.userId.toString() == x.user._id.toString()) ? true : false
+    };
+  });    
+
+  console.log(followersWithData);
+  return followersWithData;
+}
+
+
 
 module.exports = router;

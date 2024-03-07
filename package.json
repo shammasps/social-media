@@ -3,21 +3,40 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node --inspect app.js"
+    "start": "nodemon app.js"
+  },
+  "nodemonConfig": {
+    "verbose": true,
+    "ignore": [
+      "node_modules",
+      "logs"
+    ],
+    "watch": [
+      "src"
+    ],
+    "ext": "js,json",
+    "execMap": {
+      "js": "node --inspect"
+    }
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
-    "express": "^4.18.2",
+    "express": "^4.18.3",
     "express-handlebars": "^7.1.2",
     "express-session": "^1.18.0",
     "hbs": "^4.2.0",
     "http-errors": "~1.6.3",
+    "moment": "^2.30.1",
     "mongoos": "^0.0.1-security",
-    "mongoose": "^8.2.0",
+    "mongoose": "^8.2.1",
     "morgan": "~1.9.1",
-    "multer": "^1.4.5-lts.1"
+    "multer": "^1.4.5-lts.1",
+    "socket.io": "^4.7.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }

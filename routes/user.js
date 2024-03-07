@@ -85,15 +85,38 @@ router.post('/login', async (req, res) => {
 
 
 router.get('/messagePage',(req,res)=>{
+  
+  
   res.render('messagePage',{layout: 'layout'});
 })
-
 router.get('/usersList', async (req, res) => {
-
   try {
-    
-    const users = await User.find();
-    res.render('usersList', { layout: 'layout',users });
+    const sessionUser = req.session.user;
+    const userId = sessionUser._id;
+
+    const loggedInUser = await User.findById(userId);
+    const MyExistingFollowers = loggedInUser.followerList;
+
+    const users = await User.find({ _id: { $ne: userId } });
+    console.log(MyExistingFollowers);
+    var myfollower = await myfollowers(req,res, 1000);
+
+    for (let i = 0; i < users.length; i++) {
+      const follower = MyExistingFollowers.find(f => f.userId.toString() === users[i]._id.toString());
+
+      console.log("Followersss ---- ------ ", follower);
+
+      if (follower != null) {
+        users[i].isFollower = true;
+        users[i].followedOn = follower.followedOn; // Add followedOn to the user object
+      }
+
+      const isFollowingMe = myfollower.find(f => f.userId.toString() === users[i]._id.toString());
+      users[i].isFollowingMe = isFollowingMe ? true : false;
+      
+    }
+    console.log(users)
+    res.render('usersList', { layout: 'layout', users });
   } catch (error) {
     console.error(error);
     res.status(500).send('Error retrieving users');
@@ -105,7 +128,10 @@ router.post('/searchUsers', async (req, res) => {
   console.log('Received search request:', req.body);
   const { searchTerm } = req.body;
   
+  const sessionUser = req.session.user;
+  const userId = sessionUser._id;
 
+  
   try {
     // Use a regular expression for case-insensitive search
     const users = await User.find({
@@ -114,6 +140,7 @@ router.post('/searchUsers', async (req, res) => {
         { lastname: { $regex: searchTerm, $options: 'i' } },
         { username: { $regex: searchTerm, $options: 'i' } },
       ],
+      _id:{$ne:userId}
     });
 
     res.render('usersList', { users, searchTerm });
@@ -123,5 +150,125 @@ router.post('/searchUsers', async (req, res) => {
   }
 });
 
+
+
+// Route for adding a follower
+router.post('/addFollower', async (req, res) => {
+  // Follower's id
+  const { followerId } = req.body;  
+  // Logged in user's id
+  const sessionUser = req.session.user;
+  const userId = sessionUser._id;
+
+  try {
+    // Find the user who will be followed
+    const loggedInUser = await User.findById(userId);
+    
+    if (!loggedInUser) {
+      return res.status(404).send('User not found');
+    }
+    // Check if the user is already a follower
+    if (loggedInUser.followerList.some(follower => follower.userId.toString() === followerId.toString())) {
+      return res.status(400).send('User is already a follower');
+    }
+
+    // Update the follower list for the user to follow
+    loggedInUser.followerList.push({
+      userId: followerId,
+      followedOn: new Date()
+    });
+
+    // Save the updated user
+    await loggedInUser.save();
+
+    res.redirect('/usersList');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error adding follower');
+  }
+});
+
+
+// Route for unfollowing a user
+router.post('/removeFollower', async (req, res) => {
+  // Follower's id to be removed
+  const { followerId } = req.body;  
+  // Logged in user's id
+  const sessionUser = req.session.user;
+  const userId = sessionUser._id;
+
+  try {
+    // Find the logged-in user
+    const loggedInUser = await User.findById(userId);
+    
+
+    if (!loggedInUser) {
+      return res.status(404).send('User not found');
+    }
+
+    // Find the index of the follower in the followerList array
+    const followerIndex = loggedInUser.followerList.findIndex(follower => follower.userId.toString() === followerId.toString());
+
+    // Check if the user is in the follower list
+    if (followerIndex === -1) {
+      return res.status(400).send('User is not a follower');
+    }
+
+    // Remove the user from the follower list
+    loggedInUser.followerList.splice(followerIndex, 1);
+
+    // Save the updated user
+    await loggedInUser.save();
+
+    res.redirect('/usersList');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error removing follower');
+  }
+});
+router.get('/notification', async (req, res) => {
+  try {
+    followersWithData =await myfollowers(req, res, 10);
+    res.render('notification', { layout: 'layout', top10Followers: followersWithData });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error retrieving followers for notification');
+  }
+});
+
+async function myfollowers(req, res, total){
+  const sessionUser = req.session.user;
+  const userId = sessionUser._id;
+  const me = await User.findById(userId);
+
+  // Find users who are following the logged-in user
+  const followersOfLoggedInUser = await User.find({ "followerList.userId": userId });
+
+  // Sort followerList based on followedOn date in descending order for each user
+  const followersWithSortedLists = followersOfLoggedInUser.map(user => ({
+    ...user.toObject(),
+    followerList: user.followerList.sort((a, b) => b.followedOn - a.followedOn)
+  }));
+
+  // Flatten the sorted follower lists and take the top 10
+  const allFollowers = followersWithSortedLists.flatMap(user => 
+    user.followerList.map(follower => ({ follower, user }))
+  );
+  //const sortedFollowers = allFollowers.sort((a, b) => b.follower.followedOn - a.follower.followedOn);
+  const top10Followers = allFollowers.slice(0, total);
+
+ const followersWithData= top10Followers.map(x=>{
+    return {
+      userId: x.user._id,
+      followedOn: x.follower.followedOn,
+      profilePicture: x.user.profilePicture,
+      followerName: x.user.username,
+      isAlreadyFollowing:me?.followerList.find(y=> y.userId.toString() == x.user._id.toString()) ? true : false
+    };
+  });    
+
+  console.log(followersWithData);
+  return followersWithData;
+}
 
 module.exports = router;

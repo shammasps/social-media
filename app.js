@@ -3,7 +3,7 @@ var express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const session = require('express-session'); 
-
+const exphbs = require('express-handlebars');
 
 
 var path = require('path');
@@ -16,6 +16,25 @@ console.log(1)
 var app = express();
 
 
+// Configure Handlebars as the view engine
+const hbs = exphbs.create({
+  helpers: {
+    formatDate: function (dateString) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+      return new Date(dateString).toLocaleDateString(undefined, options);
+    }
+  },
+  extname: 'hbs',
+  defaultLayout: 'layout',
+  layoutsDir: path.join(__dirname, 'views'),
+  // Allow prototype access
+  runtimeOptions: {
+    allowProtoPropertiesByDefault: true,
+    allowProtoMethodsByDefault: true,
+  },
+});
+
+app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 
 app.use(bodyParser.json());
