@@ -44,6 +44,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 var userRouter = require('./routes/user');
 var postRouter = require('./routes/post');
 var profileRouter = require('./routes/profile');
+var chatRouter = require('./routes/chat');
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/uploads/profile', express.static(path.join(__dirname, 'uploads/profile')));
 
@@ -64,19 +65,21 @@ app.use(session({
 app.use('/', userRouter);
 app.use('/post', postRouter);
 app.use('/profile', profileRouter);
+app.use('/chat', chatRouter);
+
 
 
 
 console.log(3)
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
+// // catch 404 and forward to error handler
+// app.use(function(req, res, next) {
+//   next(createError(404));
+// });
 
 app.use((err, req, res, next) => {
   console.error(err);
   // Redirect to the home route or any other route you prefer
-  res.redirect('/');
+ // res.redirect('/');
 
   // Optionally, you can also send an error response to the client
   // res.status(500).send('Internal Server Error');

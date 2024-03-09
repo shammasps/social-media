@@ -84,11 +84,6 @@ router.post('/login', async (req, res) => {
 // })
 
 
-router.get('/messagePage',(req,res)=>{
-  
-  
-  res.render('messagePage',{layout: 'layout'});
-})
 router.get('/usersList', async (req, res) => {
   try {
     const sessionUser = req.session.user;

@@ -14,38 +14,33 @@
 
   <section class="h-100 gradient-custom-2">
 
-    <div class="container py-5 h-100">
+    <div class="container-fluid py-5 h-100">
 
-      <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="row d-flex justify-content-center">
 
         {{!-- <div class="col col-lg-9 col-xl-7"> --}}
-          <div class="col-md-2" style="margin-bottom: 318%; margin-left: -7%; height: 541px;">
-            <img src="/images/profileLeft.jpg" class="float-left" alt="" height="100%" style="width: 155%;" />
-            <img src="/images/profileLeft2.jpeg" class="float-left" alt="" height="100%" style="width: 155%;" />
-            <img src="/images/profileLeft3.jpeg" class="float-left" alt="" height="100%" style="width: 155%;" />
-            <img src="/images/profileLeft4.jpeg" class="float-left" alt="" height="100%" style="width: 155%;" />
-            <img src="/images/profileLeft5.jpeg" class="float-left" alt="" height="100%" style="width: 155%;" />
-            <img src="/images/profileLeft6.jpeg" class="float-left" alt="" height="100%" style="width: 155%;" />
-          </div>
+          <div class="col-md-2 profile-bg-photos-left">
+                     </div>
 
-          <div class="col col-md-8" style="z-index:2; height: 3579px;">
+          <div class="col col-md-8" style="z-index:2;">
             <div class="card">
 
-              <div class="rounded-top d-flex flex-row" style="height:200px;">
-                <div class="ms-4 ml-1 d-flex flex-column" style="width: 150px;">
+              <div class="rounded-top d-flex flex-row" >
+                <div class="ms-4 ml-1 d-flex flex-column">
 
                   <img src={{user.profilePicture}} alt="" class="img-fluid img-thumbnail mt-4 mb-2"
-                    style="width: 150px; z-index: 1">
+                    style="height:200px; z-index: 1">
 
                 </div>
 
                 <div class="ms-3" style="margin-top: 88px; margin-left: 4%; color: black;">
                   <h5>{{user.username}}</h5>
+                  <p class="p">{{user.userSkills}}</p>
                 </div>
               </div>
               <div class="p-4 text-black">
-                <div class="d-flex justify-content-end text-center py-1">
-                  <div style="margin-right: 49%; col-md-6">
+                <div class="row ">
+                  <div class="col-8">
 
                     {{#if isMyProfile}}
                     <!-- If it's the user's own profile, show the edit button -->
@@ -88,15 +83,15 @@
 
 
 
-                  <div>
+                  <div class="col-1">
                     <p class="mb-1 h5">{{myPost.length}}</p>
                     <p class="small text-muted mb-0">Photos</p>
                   </div>
-                  <div class="px-3">
+                  <div class="col-1" class="px-3">
                     <p class="mb-1 h5">{{followers}}</p>
                     <p class="small text-muted mb-0">Followers</p>
                   </div>
-                  <div>
+                  <div class="col-1">
                     <p class="mb-1 h5">{{following}}</p>
                     <p class="small text-muted mb-0">Following</p>
                   </div>
@@ -168,7 +163,7 @@
 
 
                               <!-- Other post details here -->
-                              <a class="dropdown-item d-flex align-items-center" href="/posts/delete/{{_id}}">
+                              <a class="dropdown-item d-flex align-items-center" href="/post/delete/{{_id}}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                   fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                   stroke-linejoin="round" class="feather feather-share-2 icon-sm mr-2">
@@ -188,14 +183,14 @@
 
                         </div>
                       </div>
-                      <div class="card-body">
+                      <div class="card-body mx-auto">
 
                         {{#if isImage}}
 
-                        <img class="img-fluid" src="{{imageUrl}}" alt="{{title}}">
+                        <img class="img-fluid" style="height: 500px;" src="{{imageUrl}}" alt="{{title}}">
                         <p class="mb-3 tx-14">{{description}}</p>
                         {{else if isVideo}}
-                        <video width="100%" height="auto" controls alt="{{title}}">
+                        <video width="100%" height="500px" controls alt="{{title}}">
                           <source src="{{imageUrl}}" type="video/mp4">
                           Your browser does not support the video tag.
                         </video>
@@ -207,16 +202,24 @@
 
                       <div class="card-footer">
                         <div class="d-flex post-actions">
-                          <a href="javascript:;" class="d-flex align-items-center text-muted mr-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                              stroke-linejoin="round" class="feather feather-heart icon-md">
-                              <path
-                                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                              </path>
-                            </svg>
-                            <p class="d-none d-md-block ml-2">Like</p>
-                          </a>
+                           <form action="/post/like" method="post" id="likeForm">
+                  <input type="hidden" name="postId" value="{{_id}}" />
+
+                  <a href="javascript:;" class="d-flex align-items-center text-muted mr-4{{#if isLiked}} liked{{/if}}"
+                    onclick="document.getElementById('likeForm').submit()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                      class="feather feather-heart icon-md">
+                      <path
+                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                      </path>
+                    </svg>
+                  </a>
+                  <p class="d-none d-md-block ml-2"><button class="d-none" type="submit">Like</button></p>
+              
+                  {{likeCount}}
+                </form>
+
                           <a href="javascript:;" class="d-flex align-items-center text-muted mr-4">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                               fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -243,22 +246,10 @@
                 </div>
                 {{/each}}
               </div>
+
             </div>
           </div>
-          <div class="col-md-2" style="z-index:1; margin-bottom: 318%; margin-left: -7%; height: 541px;">
-            <img src="/images/profileRight.jpeg" class="float-right" alt="" height="100%"
-              style="margin-right: -83%; width: 155%;" />
-            <img src="/images/profileRight2.jpeg" class="float-right" alt="" height="100%"
-              style="margin-right: -83%; width: 155%;" />
-            <img src="/images/profileRight3.jpeg" class="float-right" alt="" height="100%"
-              style="margin-right: -83%; width: 155%;" />
-            <img src="/images/profileRight4.jpeg" class="float-right" alt="" height="100%"
-              style="margin-right: -83%; width: 155%;" />
-            <img src="/images/profileRight5.jpeg" class="float-right" alt="" height="100%"
-              style="margin-right: -83%; width: 155%;" />
-            <img src="/images/profileRight6.jpeg" class="float-right" alt="" height="100%"
-              style="margin-right: -83%; width: 155%;" />
-
+          <div class="col-md-2 profile-bg-photos-right" >
           </div>
 
 

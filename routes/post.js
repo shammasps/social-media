@@ -10,6 +10,7 @@ const multer = require('multer');
 const { post } = require('./profile');
 const User = require('../models/userModel');
 /* GET users listing. */
+const { ObjectId } = require('mongodb');
 
 
 
@@ -17,7 +18,7 @@ const User = require('../models/userModel');
 
 router.get('/', async function(req, res, next) {
   try {
-
+   
     const sessionUser = req.session.user;
     const userId = sessionUser._id;
     // get all posts from database (mongodb)
@@ -28,12 +29,16 @@ router.get('/', async function(req, res, next) {
     //set isImage and isVideo in that posts
     const postsWithMediaInfo = posts.map(post => {
       var postedByDetails = allUsers.find(x=> x._id.toString() == post.postedBy.toString());
+      var isLiked= post.likes?.map(x=>x.likedBy.toString()).indexOf(userId.toString()) ?? -1;
+        var likeCount=  post.likes?.length ?? 0;
       return {
         ...post.toObject(),
         isImage: post.imageUrl.endsWith('.jpg') || post.imageUrl.endsWith('.png'),
         isVideo: post.imageUrl.endsWith('.mp4') || post.imageUrl.endsWith('.webm'),
         profilePicture:  postedByDetails?.profilePicture,
-        postedByName :postedByDetails?.username
+        postedByName :postedByDetails?.username,
+        isLiked:isLiked > -1 ? true : false,
+        likeCount: likeCount
       };
     });
     // render home page - and pass posts into home page
@@ -107,25 +112,56 @@ router.post('/savePost', upload.single('upload'), async (req, res) => {
   }
 });
 
-// Handle POST deletion
-router.post('/delete/:postId', async (req, res) => {
-  const postId = req.params.postId;
-  console.log('Received request to delete post with ID:', postId);
-
+router.get('/delete/:postId', async (req, res) => {
+ 
   try {
+    const postId = req.params.postId.toString();
+    console.log('Received request to delete post with ID:', postId);
+    const objId = new ObjectId(postId);
+  
     // Find the post and delete it
-    const deletedPost = await Post.findByIdAndDelete(postId);
+    const deletedPost = await Post.findByIdAndDelete(objId);
 
     if (!deletedPost) {
       return res.status(404).json({ message: 'Post not found' });
     }
 
-     res.redirect('/'); // Redirect to the home page or another appropriate page
+     res.redirect('/profile'); // Redirect to the home page or another appropriate page
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 });
 
+
+router.post('/like', async (req, res) => {
+  console.log("11111111")
+
+  const { postId } = req.body;
+  try {
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    const userId = req.session.user._id;
+
+    // Check if the user has already liked the post
+    const alreadyLikedIndex = post.likes.findIndex(like => like.likedBy.toString() === userId.toString());
+    if (alreadyLikedIndex !== -1) {
+      // User has already liked the post, remove the like
+      post.likes.splice(alreadyLikedIndex, 1);
+    } else {
+      // User hasn't liked the post, add the like
+      post.likes.push({ likedBy: userId });
+    }
+
+    await post.save(); // Save the updated post
+    return res.redirect("/post");
+  } catch (error) {
+    console.error(error);
+    return res.redirect("/");
+  }
+});
 
 module.exports = router;

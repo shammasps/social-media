@@ -3,6 +3,7 @@ var express = require('express');
 var router = express.Router();
 const User = require('../models/userModel');
 const Post = require('../models/postModel');
+const data = require('../models/data');
 const multer = require('multer');
 const path = require('path');
 
@@ -12,9 +13,9 @@ router.get('/', async (req, res) => {
     console.log(req);
   const { profileUserId } = req.query;
   const sessionUser = req.session.user;
-  const userId = profileUserId ? profileUserId : sessionUser._id;
+  const userId = profileUserId ? profileUserId : sessionUser._id.toString();
 
-    const user = await User.findById({_id:userId});
+    const user = await User.findById(userId);
     user.password = ""; // dont sent passworkd to UI
     const username = sessionUser.username;
     // get all posts from database (mongodb)
@@ -22,12 +23,16 @@ router.get('/', async (req, res) => {
 
     //set isImage and isVideo in that posts
     const postsWithMediaInfo = posts.map(post => {
+      var isLiked= post.likes?.map(x=>x.likedBy.toString()).indexOf(userId.toString()) ?? -1;
+      var likeCount=  post.likes?.length ?? 0;
       return {
         ...post.toObject(),
         isImage: post.imageUrl.endsWith('.jpg') || post.imageUrl.endsWith('.png'),
         isVideo: post.imageUrl.endsWith('.mp4') || post.imageUrl.endsWith('.webm'),
         profilePicture:  user?.profilePicture,
-        postedByName :user?.username
+        postedByName :user?.username,
+        isLiked:isLiked > -1 ? true : false,
+        likeCount: likeCount
       };
     });
     var following = user.followerList?.length ?? 0;
@@ -38,6 +43,10 @@ router.get('/', async (req, res) => {
     // var isFollowingMe = user.followerList?.length ?? 0;
     // var isFollower = await (await myfollowers(req,res,10000)).length;
 
+
+    // Assuming user.skills is an array of selected skill values
+    user.userSkills  = user.skills?.map(x => x);
+    user.userSkills  = data.sportsSkills.filter(x=> user.userSkills.indexOf(x.value)>-1).map(y=> y.text);
     res.render('profile', { layout: 'layout' , user:user,myPost:postsWithMediaInfo , following, followers, isMyProfile});
   }catch (e){
     console.log(e)
@@ -57,9 +66,24 @@ router.get('/profileEdit', async (req, res) => {
     //1. get profile from db by userid 
     const user = await User.findOne({_id:userId});
     user.password = ""; // dont sent passworkd to UI
+    
+    // Assuming user.skills is an array of selected skill values
+    user.userSkills  = user.skills?.map(x => x);
+    user.userSkills  = data.sportsSkills.filter(x=> user.userSkills.indexOf(x.value)>-1).map(y=> y.text);
 
-    //2. render UI- profileEdit page and pass profile details     
-    res.render('profileEdit', { layout: 'layout', user:user });
+// Loop through each object in the sportsSkills array
+data.sportsSkills.forEach(skill => {
+    // Check if the skill text exists in the user's skills
+    if (user.userSkills && user.userSkills.includes(skill.text)) {
+        // If the skill is selected, set isSelected to true
+        skill.isSelected = true;
+    } else {
+        // If the skill is not selected, set isSelected to false
+        skill.isSelected = false;
+    }
+});
+        //2. render UI- profileEdit page and pass profile details     
+    res.render('profileEdit', { layout: 'layout', user:user,sportsSkills: data.sportsSkills });
 });
 
 // Set up multer storage
@@ -97,8 +121,7 @@ const storage = multer.diskStorage({
     try {
       const sessionUser = req.session.user;
       const userId = sessionUser._id;
-       // Assuming you have user authentication middleware
-      const { username, phone, birthday, aboutMe } = req.body;
+      const { username, phone, birthday, aboutMe, skills } = req.body;
   
       // Update user details
       await User.findByIdAndUpdate(userId, {
@@ -106,15 +129,15 @@ const storage = multer.diskStorage({
         phone,
         birthday,
         aboutMe,
+        skills
       });
   
       res.redirect('/profile'); // Redirect to the profile page after updating
     } catch (error) {
       console.error(error);
-      res.status(500).send('Error updating user details.');
+      res.redirect("/");
     }
   });
-
 
   
 async function myfollowers(req, res, total){

@@ -17,7 +17,9 @@ const User = mongoose.model('User',
     followerList: [{
         userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
         followedOn: { type: Date, default: Date.now }
-      }]
+      }],
+      skills: [{ type: String }] // Define the skills array field
+    
 });
 
   
