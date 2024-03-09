@@ -9,7 +9,7 @@ const path = require('path');
 // Route to render the profile page
 router.get('/', async (req, res) => {
   try {
-    console.log(1);
+    console.log(req);
   const { profileUserId } = req.query;
   const sessionUser = req.session.user;
   const userId = profileUserId ? profileUserId : sessionUser._id;
@@ -32,13 +32,16 @@ router.get('/', async (req, res) => {
     });
     var following = user.followerList?.length ?? 0;
     var followers = await (await myfollowers(req,res,10000)).length;
-    var isMyProfile = profileUserId && profileUserId.toString() == userId.toString()
-  
+
+    var isMyProfile = sessionUser._id.toString() == userId.toString()
+
+    // var isFollowingMe = user.followerList?.length ?? 0;
+    // var isFollower = await (await myfollowers(req,res,10000)).length;
+
     res.render('profile', { layout: 'layout' , user:user,myPost:postsWithMediaInfo , following, followers, isMyProfile});
   }catch (e){
     console.log(e)
-    res.render('profile', { layout: 'layout'} );
-
+    res.redirect('/');
   }
 });
 
@@ -75,12 +78,13 @@ const storage = multer.diskStorage({
 
   router.post('/uploadPhoto', upload.single('profilePhoto'), async (req, res) => {
 
-    // Update the user document with the new profile photo filename
+    
+    try {
+      // Update the user document with the new profile photo filename
     const sessionUser = req.session.user;
     const userId = sessionUser._id;
     const newPhotoFilename = 'uploads/profile/'+req.file.filename;
   
-    try {
       await User.findByIdAndUpdate(userId, { profilePicture: newPhotoFilename });
       res.redirect("/profile/profileEdit")
     } catch (error) {

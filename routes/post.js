@@ -107,6 +107,25 @@ router.post('/savePost', upload.single('upload'), async (req, res) => {
   }
 });
 
+// Handle POST deletion
+router.post('/delete/:postId', async (req, res) => {
+  const postId = req.params.postId;
+  console.log('Received request to delete post with ID:', postId);
+
+  try {
+    // Find the post and delete it
+    const deletedPost = await Post.findByIdAndDelete(postId);
+
+    if (!deletedPost) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+     res.redirect('/'); // Redirect to the home page or another appropriate page
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
 
 
 module.exports = router;

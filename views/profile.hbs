@@ -1,218 +1,276 @@
-
-
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <link rel="stylesheet" href="/stylesheets/profileStyle.css">
 </head>
+
 <body>
 
 
 
-<section class="h-100 gradient-custom-2">
- 
-  <div class="container py-5 h-100">
-     
-    <div class="row d-flex justify-content-center align-items-center h-100">
-      
-      {{!-- <div class="col col-lg-9 col-xl-7"> --}}
-        <div class="col-md-2" style="margin-bottom: 318%; margin-left: -7%; height: 541px;">
-          <img src="/images/profileLeft.jpg" class="float-left" alt="" height="100%" style="width: 155%;" />
-       <img src="/images/profileLeft2.jpeg" class="float-left" alt="" height="100%" style="width: 155%;" />
-       <img src="/images/profileLeft3.jpeg" class="float-left" alt="" height="100%" style="width: 155%;" />
-       <img src="/images/profileLeft4.jpeg" class="float-left" alt="" height="100%" style="width: 155%;" />
-       <img src="/images/profileLeft5.jpeg" class="float-left" alt="" height="100%" style="width: 155%;" />
-        <img src="/images/profileLeft6.jpeg" class="float-left" alt="" height="100%" style="width: 155%;" />
-        </div>
-        
-         <div class="col col-md-8"  style="z-index:2; height: 3579px;">
-          <div class="card">
-          
-          <div class="rounded-top d-flex flex-row" style="height:200px;">
-            <div class="ms-4 ml-1 d-flex flex-column" style="width: 150px;">
-              
-              <img src={{user.profilePicture}}
-                alt="" class="img-fluid img-thumbnail mt-4 mb-2"
-                style="width: 150px; z-index: 1">
-             
-            </div>
-           
-            <div class="ms-3" style="margin-top: 88px; margin-left: 4%; color: black;">
-              <h5>{{user.username}}</h5>
-            </div>
-          </div>
-          <div class="p-4 text-black">
-            <div class="d-flex justify-content-end text-center py-1">
-               <div style="margin-right: 55%; col-md-6" >
-                {{#if isMyProfile}}
-            <a href="/profile/profileEdit" class="btn btn-outline-dark" data-mdb-ripple-color="dark" style="z-index: 1;">
-              Edit profile
-            </a>
-                {{/if}}
-            </div>
-            
-              <div>
-                <p class="mb-1 h5">{{myPost.length}}</p>
-                <p class="small text-muted mb-0">Photos</p>
-              </div>
-              <div class="px-3">
-                <p class="mb-1 h5">{{followers}}</p>
-                <p class="small text-muted mb-0">Followers</p>
-              </div>
-              <div>
-                <p class="mb-1 h5">{{following}}</p>
-                <p class="small text-muted mb-0">Following</p>
-              </div>
-              
-            </div>
-          </div>
-          <div class="card-body p-4 text-black">
-            <div class="mb-5">
-              <p class="lead fw-normal mb-1">About</p>
-              <div class="p-4" style="background-color: #f8f9fa;">
-                <p class="font-italic mb-1">{{user.aboutMe}}</p>
-                
-              </div>
-            </div>
-            </div>
-            <div class="d-flex justify-content-between align-items-center mb-4" style="margin-left: 43%;">
-              <i class="fa fa-th" aria-hidden="true"> POSTS</i>
-            </div>
-           
-      
-        
-        <div class="col-md-12 middle-wrapper">
-          {{#each myPost}}
-          <div class="row">
-            <div class="col-md-12 grid-margin">
-              <div class="card rounded">
-                <div class="card-header">
-                  <div class="d-flex align-items-center justify-content-between">
-                    <div class="d-flex align-items-center">
+  <section class="h-100 gradient-custom-2">
 
-                      <img class="img-xs rounded-circle" src={{profilePicture}}
-                       alt="">
+    <div class="container py-5 h-100">
 
-                      <div class="ml-2">
-                        <p>{{postedByName}}</p>
-                        <p class="tx-11 text-muted">{{formatDate postedDate}}</p>
-                      </div>
-                    </div>
-                    <div class="dropdown">
-                      <button class="btn p-0" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                          class="feather feather-more-horizontal icon-lg pb-3px">
-                          <circle cx="12" cy="12" r="1"></circle>
-                          <circle cx="19" cy="12" r="1"></circle>
-                          <circle cx="5" cy="12" r="1"></circle>
-                        </svg>
-                      </button>
-                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                        <a class="dropdown-item d-flex align-items-center" href="#">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="feather feather-share-2 icon-sm mr-2">
-                            <circle cx="18" cy="5" r="3"></circle>
-                            <circle cx="6" cy="12" r="3"></circle>
-                            <circle cx="18" cy="19" r="3"></circle>
-                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-                          </svg> <span class="">Share</span></a>
-                        <a class="dropdown-item d-flex align-items-center" href="#">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="feather feather-copy icon-sm mr-2">
-                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                          </svg> <span class="">Copy link</span></a>
-                        <a class="dropdown-item d-flex align-items-center" href="#">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="feather feather-share-2 icon-sm mr-2">
-                            <circle cx="18" cy="5" r="3"></circle>
-                            <circle cx="6" cy="12" r="3"></circle>
-                            <circle cx="18" cy="19" r="3"></circle>
-                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-                          </svg> <span class="">delete</span></a>
-                      </div>
-                    </div>
+      <div class="row d-flex justify-content-center align-items-center h-100">
+
+        {{!-- <div class="col col-lg-9 col-xl-7"> --}}
+          <div class="col-md-2" style="margin-bottom: 318%; margin-left: -7%; height: 541px;">
+            <img src="/images/profileLeft.jpg" class="float-left" alt="" height="100%" style="width: 155%;" />
+            <img src="/images/profileLeft2.jpeg" class="float-left" alt="" height="100%" style="width: 155%;" />
+            <img src="/images/profileLeft3.jpeg" class="float-left" alt="" height="100%" style="width: 155%;" />
+            <img src="/images/profileLeft4.jpeg" class="float-left" alt="" height="100%" style="width: 155%;" />
+            <img src="/images/profileLeft5.jpeg" class="float-left" alt="" height="100%" style="width: 155%;" />
+            <img src="/images/profileLeft6.jpeg" class="float-left" alt="" height="100%" style="width: 155%;" />
+          </div>
+
+          <div class="col col-md-8" style="z-index:2; height: 3579px;">
+            <div class="card">
+
+              <div class="rounded-top d-flex flex-row" style="height:200px;">
+                <div class="ms-4 ml-1 d-flex flex-column" style="width: 150px;">
+
+                  <img src={{user.profilePicture}} alt="" class="img-fluid img-thumbnail mt-4 mb-2"
+                    style="width: 150px; z-index: 1">
+
+                </div>
+
+                <div class="ms-3" style="margin-top: 88px; margin-left: 4%; color: black;">
+                  <h5>{{user.username}}</h5>
+                </div>
+              </div>
+              <div class="p-4 text-black">
+                <div class="d-flex justify-content-end text-center py-1">
+                  <div style="margin-right: 49%; col-md-6">
+
+                    {{#if isMyProfile}}
+                    <!-- If it's the user's own profile, show the edit button -->
+                    <a href="/profile/profileEdit" class="btn btn-outline-dark" data-mdb-ripple-color="dark"
+                      style="z-index: 1;">
+                      Edit profile
+                    </a>
+                    {{!-- {{else}}
+                    <!-- If it's not the user's profile -->
+
+
+                    {{#if isFollower}}
+                    <!-- If the user is being followed, show the follow back button -->
+                    <form action="/addFollower" method="post" style="display: inline-block;">
+                      <input type="hidden" name="followerId" value="{{_id}}" />
+                      <button type="submit" class="btn btn-primary">Follow back</button>
+                    </form>
+                    {{else}}
+
+                    {{#if isFollowingMe}}
+                    <!-- If the user is following, show the unfollow button -->
+                    <form action="/removeFollower" method="post" style="display: inline-block;">
+                      <input type="hidden" name="followerId" value="{{_id}}" />
+                      <button type="submit" class="btn btn-primary">Unfollow</button>
+                    </form>
+                    {{else}}
+                    <!-- If the user is not being followed, show the follow button -->
+                    <form action="/addFollower" method="post" style="display: inline-block;">
+                      <input type="hidden" name="followerId" value="{{_id}}" />
+                      <button type="submit" class="btn btn-primary">Follow</button>
+                    </form>
+                    {{/if}}
+                    {{/if}} --}}
+                    {{/if}}
+
+                  </div>
+
+
+
+
+
+
+                  <div>
+                    <p class="mb-1 h5">{{myPost.length}}</p>
+                    <p class="small text-muted mb-0">Photos</p>
+                  </div>
+                  <div class="px-3">
+                    <p class="mb-1 h5">{{followers}}</p>
+                    <p class="small text-muted mb-0">Followers</p>
+                  </div>
+                  <div>
+                    <p class="mb-1 h5">{{following}}</p>
+                    <p class="small text-muted mb-0">Following</p>
+                  </div>
+
+                </div>
+              </div>
+              <div class="card-body p-4 text-black">
+                <div class="mb-5">
+                  <p class="lead fw-normal mb-1">About</p>
+                  <div class="p-4" style="background-color: #f8f9fa;">
+                    <p class="font-italic mb-1">{{user.aboutMe}}</p>
 
                   </div>
                 </div>
-                <div class="card-body">
-                  
-                  {{#if isImage}}
-                  
-                  <img class="img-fluid" src="{{imageUrl}}" alt="{{title}}">
-                  <p class="mb-3 tx-14">{{description}}</p>
-                  {{else if isVideo}}
-                  <video width="100%" height="auto" controls alt="{{title}}">
-                    <source src="{{imageUrl}}" type="video/mp4">
-                    Your browser does not support the video tag.
-                  </video>
-                  <p class="mb-3 tx-14">{{description}}</p>
-                  {{else}}
-                  <!-- Handle other cases or leave it empty if you want to hide both -->
-                  {{/if}}
-                </div>
+              </div>
+              <div class="d-flex justify-content-between align-items-center mb-4" style="margin-left: 43%;">
+                <i class="fa fa-th" aria-hidden="true"> POSTS</i>
+              </div>
 
-                <div class="card-footer">
-                            <div class="d-flex post-actions">
-                                <a href="javascript:;" class="d-flex align-items-center text-muted mr-4">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart icon-md">
-                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                                    </svg>
-                                    <p class="d-none d-md-block ml-2">Like</p>
-                                </a>
-                                <a href="javascript:;" class="d-flex align-items-center text-muted mr-4">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-square icon-md">
-                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                                    </svg>
-                                    <p class="d-none d-md-block ml-2">Comment</p>
-                                </a>
-                                <a href="javascript:;" class="d-flex align-items-center text-muted">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-share icon-md">
-                                        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
-                                        <polyline points="16 6 12 2 8 6"></polyline>
-                                        <line x1="12" y1="2" x2="12" y2="15"></line>
-                                    </svg>
-                                    <p class="d-none d-md-block ml-2">Share</p>
-                                </a>
+
+
+              <div class="col-md-12 middle-wrapper">
+                {{#each myPost}}
+                <div class="row">
+                  <div class="col-md-12 grid-margin">
+                    <div class="card rounded">
+                      <div class="card-header">
+                        <div class="d-flex align-items-center justify-content-between">
+                          <div class="d-flex align-items-center">
+
+                            <img class="img-xs rounded-circle" src={{profilePicture}} alt="">
+
+                            <div class="ml-2">
+                              <p>{{postedByName}}</p>
+                              <p class="tx-11 text-muted">{{formatDate postedDate}}</p>
                             </div>
-                        </div>
+                          </div>
+                          <div class="dropdown">
+                            <button class="btn p-0" type="button" id="dropdownMenuButton2" data-toggle="dropdown"
+                              aria-haspopup="true" aria-expanded="false">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="feather feather-more-horizontal icon-lg pb-3px">
+                                <circle cx="12" cy="12" r="1"></circle>
+                                <circle cx="19" cy="12" r="1"></circle>
+                                <circle cx="5" cy="12" r="1"></circle>
+                              </svg>
+                            </button>
 
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+
+                              <a class="dropdown-item d-flex align-items-center" href="#">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                  stroke-linejoin="round" class="feather feather-share-2 icon-sm mr-2">
+                                  <circle cx="18" cy="5" r="3"></circle>
+                                  <circle cx="6" cy="12" r="3"></circle>
+                                  <circle cx="18" cy="19" r="3"></circle>
+                                  <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                                  <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                                </svg> <span class="">Share</span></a>
+                              <a class="dropdown-item d-flex align-items-center" href="#">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                  stroke-linejoin="round" class="feather feather-copy icon-sm mr-2">
+                                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg> <span class="">Copy link</span></a>
+
+
+                              <!-- Other post details here -->
+                              <a class="dropdown-item d-flex align-items-center" href="/posts/delete/{{_id}}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                  stroke-linejoin="round" class="feather feather-share-2 icon-sm mr-2">
+                                  <circle cx="18" cy="5" r="3"></circle>
+                                  <circle cx="6" cy="12" r="3"></circle>
+                                  <circle cx="18" cy="19" r="3"></circle>
+                                  <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                                  <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                                </svg>
+                                <span class="">delete</span>
+                              </a>
+                            </div>
+
+                          </div>
+
+
+
+                        </div>
+                      </div>
+                      <div class="card-body">
+
+                        {{#if isImage}}
+
+                        <img class="img-fluid" src="{{imageUrl}}" alt="{{title}}">
+                        <p class="mb-3 tx-14">{{description}}</p>
+                        {{else if isVideo}}
+                        <video width="100%" height="auto" controls alt="{{title}}">
+                          <source src="{{imageUrl}}" type="video/mp4">
+                          Your browser does not support the video tag.
+                        </video>
+                        <p class="mb-3 tx-14">{{description}}</p>
+                        {{else}}
+                        <!-- Handle other cases or leave it empty if you want to hide both -->
+                        {{/if}}
+                      </div>
+
+                      <div class="card-footer">
+                        <div class="d-flex post-actions">
+                          <a href="javascript:;" class="d-flex align-items-center text-muted mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                              stroke-linejoin="round" class="feather feather-heart icon-md">
+                              <path
+                                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                              </path>
+                            </svg>
+                            <p class="d-none d-md-block ml-2">Like</p>
+                          </a>
+                          <a href="javascript:;" class="d-flex align-items-center text-muted mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                              stroke-linejoin="round" class="feather feather-message-square icon-md">
+                              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                            <p class="d-none d-md-block ml-2">Comment</p>
+                          </a>
+                          <a href="javascript:;" class="d-flex align-items-center text-muted">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                              stroke-linejoin="round" class="feather feather-share icon-md">
+                              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                              <polyline points="16 6 12 2 8 6"></polyline>
+                              <line x1="12" y1="2" x2="12" y2="15"></line>
+                            </svg>
+                            <p class="d-none d-md-block ml-2">Share</p>
+                          </a>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+                {{/each}}
               </div>
             </div>
           </div>
-         {{/each}}
-        </div>
-        </div>
-        </div>
-        <div  class="col-md-2" style="z-index:1; margin-bottom: 318%; margin-left: -7%; height: 541px;">
-          <img src="/images/profileRight.jpeg" class="float-right" alt=""  height="100%" style="margin-right: -83%; width: 155%;" />
-           <img src="/images/profileRight2.jpeg" class="float-right" alt=""  height="100%" style="margin-right: -83%; width: 155%;" />
-            <img src="/images/profileRight3.jpeg" class="float-right" alt=""  height="100%" style="margin-right: -83%; width: 155%;" />
-             <img src="/images/profileRight4.jpeg" class="float-right" alt=""  height="100%" style="margin-right: -83%; width: 155%;" />
-              <img src="/images/profileRight5.jpeg" class="float-right" alt=""  height="100%" style="margin-right: -83%; width: 155%;" />
-              <img src="/images/profileRight6.jpeg" class="float-right" alt=""  height="100%" style="margin-right: -83%; width: 155%;" />
+          <div class="col-md-2" style="z-index:1; margin-bottom: 318%; margin-left: -7%; height: 541px;">
+            <img src="/images/profileRight.jpeg" class="float-right" alt="" height="100%"
+              style="margin-right: -83%; width: 155%;" />
+            <img src="/images/profileRight2.jpeg" class="float-right" alt="" height="100%"
+              style="margin-right: -83%; width: 155%;" />
+            <img src="/images/profileRight3.jpeg" class="float-right" alt="" height="100%"
+              style="margin-right: -83%; width: 155%;" />
+            <img src="/images/profileRight4.jpeg" class="float-right" alt="" height="100%"
+              style="margin-right: -83%; width: 155%;" />
+            <img src="/images/profileRight5.jpeg" class="float-right" alt="" height="100%"
+              style="margin-right: -83%; width: 155%;" />
+            <img src="/images/profileRight6.jpeg" class="float-right" alt="" height="100%"
+              style="margin-right: -83%; width: 155%;" />
 
-        </div>
-        
-        
-      {{!-- </div> --}}
+          </div>
+
+
+          {{!--
+        </div> --}}
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
 
 
 
 </body>
+
 </html>

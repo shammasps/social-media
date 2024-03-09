@@ -73,15 +73,13 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
-//error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+app.use((err, req, res, next) => {
+  console.error(err);
+  // Redirect to the home route or any other route you prefer
+  res.redirect('/');
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+  // Optionally, you can also send an error response to the client
+  // res.status(500).send('Internal Server Error');
 });
 
 console.log(4)
