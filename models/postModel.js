@@ -6,7 +6,7 @@ const postSchema = new mongoose.Schema({
   description: { type: String, required: true },
   tags: [{ type: String }],
   imageUrl: { type: String },
-  postedBy: { type: String },
+  postedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   postedDate: { type: Date },
   // Add other fields as needed
 });

@@ -46,6 +46,8 @@
 <body>
 
   <div class="container mt-4">
+    </br>
+    </br>
     <div class="row justify-content-center align-items-center middle-wrapper">
       {{#each posts}}
       <div class="row">
@@ -53,12 +55,11 @@
           <div class="card rounded mx-auto" style="width: 500px;">
             <div class="card-header">
               <div class="d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center media mb-3">
-  
+                <div class="d-flex align-items-center media mb-3">  
                   <img class="img-xs rounded-circle" src="{{profilePicture}}" alt="User">
   
                   <div class=" media-body ml-2">
-                    <p>{{postedBy}}</p>
+                    <p>{{postedByName}}</p>
                     <p class="tx-11 text-muted">{{formatDate postedDate}}</p>
                   </div>
                 </div>

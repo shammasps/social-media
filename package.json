@@ -14,7 +14,7 @@
     "watch": [
       "src"
     ],
-    "ext": "js,json",
+    "ext": "js json css styl jade",
     "execMap": {
       "js": "node --inspect"
     }

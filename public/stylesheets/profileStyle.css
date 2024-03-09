@@ -32,7 +32,7 @@
     }
     .img-xs {
         width: 37px;
-        height: 37px;
+        height: auto;
     }
     .rounded-circle {
         border-radius: 50% !important;

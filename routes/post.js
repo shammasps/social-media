@@ -8,6 +8,7 @@ const path = require('path'); // Add this line to import the 'path' module
 
 const multer = require('multer');
 const { post } = require('./profile');
+const User = require('../models/userModel');
 /* GET users listing. */
 
 
@@ -22,18 +23,19 @@ router.get('/', async function(req, res, next) {
     // get all posts from database (mongodb)
     const posts = await Post.find().sort({ postedDate: -1 });
 
+    const allUsers = await User.find()
 
     //set isImage and isVideo in that posts
     const postsWithMediaInfo = posts.map(post => {
-    
+      var postedByDetails = allUsers.find(x=> x._id.toString() == post.postedBy.toString());
       return {
         ...post.toObject(),
         isImage: post.imageUrl.endsWith('.jpg') || post.imageUrl.endsWith('.png'),
         isVideo: post.imageUrl.endsWith('.mp4') || post.imageUrl.endsWith('.webm'),
-       
+        profilePicture:  postedByDetails?.profilePicture,
+        postedByName :postedByDetails?.username
       };
     });
-
     // render home page - and pass posts into home page
     res.render('home', { layout: 'layout', posts: postsWithMediaInfo });
     
@@ -90,7 +92,7 @@ router.post('/savePost', upload.single('upload'), async (req, res) => {
       description,
       tags: tags ? tags.split(',').map(tag => tag.trim()) : [],
       imageUrl: req.file ? `/uploads/${req.file.filename}` : null,
-      postedBy: user.username,
+      postedBy: user._id,
       postedDate: new Date()
     });
     console.log("B")

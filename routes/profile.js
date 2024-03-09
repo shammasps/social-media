@@ -5,20 +5,20 @@ const User = require('../models/userModel');
 const Post = require('../models/postModel');
 const multer = require('multer');
 const path = require('path');
-console.log("profilecheck");
 
 // Route to render the profile page
 router.get('/', async (req, res) => {
-  
+  try {
+    console.log(1);
   const { profileUserId } = req.query;
   const sessionUser = req.session.user;
   const userId = profileUserId ? profileUserId : sessionUser._id;
 
-    const user = await User.findOne({_id:userId});
+    const user = await User.findById({_id:userId});
     user.password = ""; // dont sent passworkd to UI
     const username = sessionUser.username;
     // get all posts from database (mongodb)
-    const posts = await Post.find({postedBy:username}).sort({ postedDate: -1 });
+    const posts = await Post.find({postedBy:userId}).sort({ postedDate: -1 });
 
     //set isImage and isVideo in that posts
     const postsWithMediaInfo = posts.map(post => {
@@ -26,13 +26,20 @@ router.get('/', async (req, res) => {
         ...post.toObject(),
         isImage: post.imageUrl.endsWith('.jpg') || post.imageUrl.endsWith('.png'),
         isVideo: post.imageUrl.endsWith('.mp4') || post.imageUrl.endsWith('.webm'),
+        profilePicture:  user?.profilePicture,
+        postedByName :user?.username
       };
     });
     var following = user.followerList?.length ?? 0;
     var followers = await (await myfollowers(req,res,10000)).length;
-    var isMyProfile = profileUserId && profileUserId.toString() == sessionUser._id.toString()
-
+    var isMyProfile = profileUserId && profileUserId.toString() == userId.toString()
+  
     res.render('profile', { layout: 'layout' , user:user,myPost:postsWithMediaInfo , following, followers, isMyProfile});
+  }catch (e){
+    console.log(e)
+    res.render('profile', { layout: 'layout'} );
+
+  }
 });
 
 // Route to render the profile edit page
