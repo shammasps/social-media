@@ -48,6 +48,7 @@ var chatRouter = require('./routes/chat');
 var clubRouter = require('./routes/club');
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/uploads/profile', express.static(path.join(__dirname, 'uploads/profile')));
+app.use('/uploads/jersy', express.static(path.join(__dirname, 'uploads/jersy')));
 
 console.log(2)
 app.use(logger('dev'));

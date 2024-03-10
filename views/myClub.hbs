@@ -1,19 +1,22 @@
 
 
 <div class="container-fluid mt-5">
-    
+    <br>
+    <div class="mt-4"></div>
     <!-- Notification Club Section -->
-    <div class="card mt-4">
+    {{!-- <div class="card mt-4">
         <div class="card-header">
             <h5 class="mb-0">Notification Club</h5>
         </div>
         <div class="card-body">
             <p>Accept follow requests for your club here.</p>
         </div>
-    </div>
+    </div> --}}
     <div class="row">
 
         <!-- Left Section: Display Existing Members -->
+                {{#if myClub}}
+
         <div class="col-md-3">
             <div class="card">
                 <div class="card-header">
@@ -23,7 +26,8 @@
                     <ul id="existingMembers" class="list-group">
                         {{#each myClub.members}}
                         <li class="list-group-item">
-                            {{this.memberId.username}}
+                            {{this.memberId.username}} {{#if this.isAdmin}} (Admin) {{/if}}
+
                             <form class="d-inline" action="/club/removeMember" method="post">
                                 <input type="hidden" name="memberId" value="{{this._id}}">
                                 <input type="hidden" name="clubId" value="{{myClub._id}}">
@@ -68,18 +72,39 @@
                 </div>
 
         </div>
-
+{{/if}}
         <!-- Middle Section: Display Club Details and Add Member Form -->
-        <div class="col-md-6">
+           {{#if myClub}}
+        <div class="col-md">
             <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">Club Details</h5>
+                  <div class="card mb-4 mt-2">
+                    <div class="card-header"><h4>{{#unless myClub}} You are not a member of any club {{/unless}} {{myClub.clubName}}</h4></div>
+                    <div class="card-body text-center">
+                        <!-- Profile picture image-->
+
+                        <img id="filePreview" style="height: 200px;" class="img-account-profile rounded mb-2" src="../{{myClub.jersyPhoto}}"
+                            alt="">
+
+                        <!-- Profile picture help block-->
+                        <div class="small font-italic text-muted mb-4">JPG or PNG</div>
+                        <!-- Profile picture upload button-->
+                        {{#if myClub.isAdmin}}
+                        <form action="/club/uploadJersy" method="post" enctype="multipart/form-data">
+                            <label for="files" class="btn">Select Image</label>
+                            <input type="file" id="files" style="visibility:hidden;" class="form-control-file"
+                                name="jersyPhoto" accept="image/*">
+                                                            <input type="hidden" name="clubId" value="{{myClub._id}}">
+
+                            <button type="submit" class="btn btn-primary">Upload new image</button>
+                        </form>
+                        {{/if}}
+                    </div>
                 </div>
                 <div class="card-body">
                     <!-- Your existing club details and add member form -->
                  <div class="card mb-4">
                     <div class="card-header">
-                        <h5 class="mb-0">Club Details (Read-Only)</h5>
+                        <h5 class="mb-0">Club Details </h5>
                     </div>
                     <div class="card-body">
                         <div class="form-group">
@@ -116,33 +141,38 @@
 
                     </div>
                 </div>
-
-
-
-
-                   
                 </div>
             </div>
         </div>
+        {{/if}}
 
         <!-- Right Section: Display List of Other Clubs -->
-        <div class="col-md-3">
-            <div class="card">
-                 <a type="button" class="btn btn-secondary" href="/club/addClubPage">Add New Club</a>
-                <div class="card-header">
-                    <h5 class="mb-0">List Clubs</h5>
-                </div>
-                <ul class="list-group list-group-flush">
-                    {{#each allClubs}}
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        {{clubName}}
-                        <img src="club_jersey_image_url" alt="Club Jersey" class="img-thumbnail" style="max-width: 50px;">
-                        <button type="button" class="btn btn-primary" onclick="joinClub('{{_id}}')">Join Club</button>
-                    </li>
-                    {{/each}}
-                </ul>
-            </div>
+      <div class="col-md-3">
+    <div class="card">
+        {{#unless myClub}}
+            <a type="button" class="btn btn-secondary" href="/club/addClubPage">Add New Club</a>
+        {{/unless}}
+        <div class="card-header">
+            <h5 class="mb-0">Other Clubs</h5>
         </div>
+        <ul class="list-group list-group-flush" id="otherClubsList">
+            {{#each allClubs}}
+                <li class="list-group-item d-flex justify-content-between align-items-center" onclick="showAdminMembers('{{_id}}', '{{clubName}}')">
+                    {{clubName}}
+                    <img src="../{{jersyPhoto}}" alt="Club Jersey" class="img-thumbnail" style="max-width: 50px;">
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+
+     <div class="card mt-4" id="adminMembersCard" style="display: none;">
+        <div class="card-header">
+            {{!-- <h6 id="selectedclub" class="mb-0">Admin Members</h6> --}}
+            <h6 class="mb-0">Admin Members</h6>
+        </div>
+        <ul class="list-group list-group-flush" id="adminMembersList"></ul>
+    </div>
+</div>
 
     </div>
 
@@ -219,6 +249,50 @@
             })
             .catch(error => console.error('Error fetching search results:', error));
     });
-</script>
+
+
+     document.getElementById('files').addEventListener('change', function () {
+            const fileInput = this;
+     const filePreview = document.getElementById('filePreview');
+     const files = fileInput.files;
+
+            if (files.length > 0) {
+                const reader = new FileReader();
+     reader.onload = function (e) {
+         filePreview.src = e.target.result;
+                };
+     reader.readAsDataURL(files[0]);
+            } else {
+         filePreview.src = '';
+            }
+        });
+
+
+          function showAdminMembers(clubId, clubName) {
+            {{!-- document.getElementById("selectedclub").text=clubName; --}}
+        // Fetch admin members for the clicked club from the server
+        fetch(`/club/adminMembers?clubId=${clubId}`)
+            .then(response => response.json())
+            .then(data => {
+                const adminMembersList = document.getElementById('adminMembersList');
+                adminMembersList.innerHTML = '';
+
+                data.adminMembers.forEach(adminMember => {
+                    const adminMemberItem = document.createElement('li');
+                    adminMemberItem.className = 'list-group-item';
+                    adminMemberItem.textContent = adminMember??"";
+                    adminMembersList.appendChild(adminMemberItem);
+                });
+
+                // Update card header with the club name
+                const adminMembersCard = document.getElementById('adminMembersCard');
+                adminMembersCard.querySelector('.card-header h6').textContent = `Admin Members - ${clubName}`;
+
+                // Display the admin members card
+                adminMembersCard.style.display = 'block';
+            })
+            .catch(error => console.error('Error fetching admin members:', error));
+    }
+    </script>
 
 <!-- ... (Other JavaScript code) ... -->

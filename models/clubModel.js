@@ -8,6 +8,7 @@ const clubSchema = new mongoose.Schema({
     phone: String,
     regNo: String,
     isAdmin: Boolean,
+    jersyPhoto:String,
     
     members: [
         {

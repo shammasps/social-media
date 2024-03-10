@@ -43,7 +43,7 @@ router.get('/', async function(req, res, next) {
     });
     console.log(postsWithMediaInfo)
     // render home page - and pass posts into home page
-    res.render('home', { layout: 'layout', posts: postsWithMediaInfo });
+    res.render('home', { layout: 'layout', posts: postsWithMediaInfo , userData:sessionUser });
     
   } catch (error) {
     console.error(error);

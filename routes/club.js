@@ -5,24 +5,36 @@ const Club = require('../models/clubModel');
 const Message = require('../models/messageModel');
 const { ObjectId } = require('mongodb');
 
+const multer = require('multer');
+const path = require('path');
+
+message =""
 
 
 router.get('/my', async (req, res) => {
     try {
         const sessionUser = req.session.user;
         const userId = sessionUser._id;
+        const clubs = await Club.find();
 
         // Find the club where the current user is a member
         const club = await Club.findOne({ 'members.memberId': userId }).populate('members.memberId', 'username');
-        const clubs = await Club.find();
-
+        if(club)
+{        var has = club.members?.find(x=> x.isAdmin && x.memberId._id.toString() == userId.toString());
+        console.log(has,"has",club.members,"club.members")
+        club.isAdmin = has ? true : false;
+}
         console.log(club)
         // Pass the club details to the template
-        res.render('myClub', { layout: 'layout', myClub: club , allClubs: clubs});
+        res.render('myClub', { layout: 'layout', myClub: club , allClubs: clubs, message:message});
     } catch (error) {
         console.error('Error fetching club details:', error);
         res.status(500).send('Internal Server Error');
     }
+});
+
+router.get("/addClubPage",(req,res)=>{
+    res.render("addClub",{layout:"layout"})
 });
 
 
@@ -147,21 +159,92 @@ router.get('/searchMembers', async (req, res) => {
 // POST route for removing a member from the Club
 router.post('/removeMember', async (req, res) => {
     try {
-        const { clubId, memberId } = req.body;
+        const sessionUser = req.session.user;
+        const userId = sessionUser._id;
 
-        // Update the Club's members array to remove the specified member
-        const updatedClub = await Club.findByIdAndUpdate(
-            clubId,
-            { $pull: { members: { _id: memberId } } },
-            { new: true }
-        );
-
-        res.json(updatedClub);
+        //
+        const { memberId } = req.body;
+        const club = await Club.findOne({ 'members.memberId': memberId });
+        var admins = club.members?.filter(x=> x.isAdmin);
+        var isMeAdmin = club.members?.find(x=> x.memberId.toString() == memberId.toString());
+        if(admins.length ==1 && isMeAdmin){
+            message = "Should not remove, Only one admin"
+            return res.redirect("/club/my");
+        }
+        
+        if(club.members && club.members.length>1){
+            // Update the Club's members array to remove the specified member
+            const updatedClub = await Club.findByIdAndUpdate(
+                club._id,
+                { $pull: { members: { _id: memberId } } },
+                { new: true }
+            );
+        }
+        res.redirect("/club/my");
     } catch (error) {
         console.error('Error removing member:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+
+// Set up multer storage
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'uploads/profile/'); // Destination folder
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+       cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    //   cb(null, 'profilePhoto.jpg'); // Set the filename
+    },
+  });
+
+  const upload = multer({ storage: storage });
+
+  router.post('/uploadJersy', upload.single('jersyPhoto'), async (req, res) => {
+
+    
+    try {
+      // Update the user document with the new profile photo filename
+    const sessionUser = req.session.user;
+    const userId = sessionUser._id;
+    const newPhotoFilename = 'uploads/profile/'+req.file.filename;
+    const club = await Club.findOne({ 'members.memberId': userId });
+
+      await Club.findByIdAndUpdate(club._id, { jersyPhoto: newPhotoFilename });
+      res.redirect("/club/my")
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Error updating user profile photo.');
+    }
+  });
+
+
+  router.get('/adminMembers', async (req, res) => {
+    try {
+        const clubId = req.query.clubId;
+
+        // Find the club by ID and populate the members with only admin members
+
+        const club = await Club.findById(clubId).populate('members.memberId', 'username');
+
+        if (!club) {
+            return res.status(404).json({ error: 'Club not found' });
+        }
+        console.log(club.members)
+        // Extract the admin members' usernames
+        const adminMembers = club.members
+            .filter(member => member && member.isAdmin &&  member.memberId && member.memberId.username)
+            .map(member => member.memberId.username);
+
+        res.json({ adminMembers });
+    } catch (error) {
+        console.error('Error fetching admin members:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 
 
 module.exports = router;
