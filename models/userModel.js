@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
 // userSkills is a virtual field
 userSchema.virtual('userSkills').get(function () {
   return data.sportsSkills
-    .filter((x) => this.skills.indexOf(x.value) > -1)
+    .filter((x) => this.skills?.indexOf(x.value) > -1)
     .map((y) => y.text);
 });
 userSchema.set('toObject', { virtuals: true });

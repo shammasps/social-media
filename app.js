@@ -45,6 +45,7 @@ var userRouter = require('./routes/user');
 var postRouter = require('./routes/post');
 var profileRouter = require('./routes/profile');
 var chatRouter = require('./routes/chat');
+var clubRouter = require('./routes/club');
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/uploads/profile', express.static(path.join(__dirname, 'uploads/profile')));
 
@@ -66,7 +67,7 @@ app.use('/', userRouter);
 app.use('/post', postRouter);
 app.use('/profile', profileRouter);
 app.use('/chat', chatRouter);
-
+app.use('/club', clubRouter);
 
 
 

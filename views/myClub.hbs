@@ -1,0 +1,224 @@
+
+
+<div class="container-fluid mt-5">
+    
+    <!-- Notification Club Section -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5 class="mb-0">Notification Club</h5>
+        </div>
+        <div class="card-body">
+            <p>Accept follow requests for your club here.</p>
+        </div>
+    </div>
+    <div class="row">
+
+        <!-- Left Section: Display Existing Members -->
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Existing Members</h5>
+                </div>
+                <div class="card-body">
+                    <ul id="existingMembers" class="list-group">
+                        {{#each myClub.members}}
+                        <li class="list-group-item">
+                            {{this.memberId.username}}
+                            <form class="d-inline" action="/club/removeMember" method="post">
+                                <input type="hidden" name="memberId" value="{{this._id}}">
+                                <input type="hidden" name="clubId" value="{{myClub._id}}">
+                                <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                            </form>
+                        </li>
+                        {{/each}}
+                    </ul>
+                </div>
+            </div>
+             <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Add New Members</h5>
+                </div>
+              <div class="card-body">
+                    <!-- Add Member Form -->
+                     <form id="clubDetailsForm" method="post" action="/club/addMember">
+
+                    <hr>
+                    <div class="form-group">
+
+                        <label for="memberSearch">Search Member</label>
+                        <input type="text" class="form-control" id="memberSearch" name="memberSearch"
+                            placeholder="Enter member username or email">
+                        <div class="form-group ml-3">
+                            <label for="memberSearchIsAdmin" class="form-check-label">
+                                <input type="checkbox" class="form-check-input" id="memberSearchIsAdmin" name="isAdmin">
+                                Is Admin
+                            </label>
+                        </div>
+                        <input type="hidden" class="form-control" id="memberSearchId" name="memberId">
+                        <input type="hidden" id="clubId" name="clubId" value="{{myClub._id}}">
+
+                        <button type="button" class="btn btn-primary mt-2" id="searchMemberBtn">Search</button>
+                        <!-- Dropdown for search results -->
+                        <div id="searchResults" class="dropdown mt-2"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary " style="display: none;" id="addMemberBtn">Add
+                        Member</button>
+                </form>
+                </div>
+                </div>
+
+        </div>
+
+        <!-- Middle Section: Display Club Details and Add Member Form -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Club Details</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Your existing club details and add member form -->
+                 <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Club Details (Read-Only)</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="clubName">Club Name</label>
+                            <input type="text" class="form-control" id="clubName" name="clubName"
+                                placeholder="Enter club name" value="{{myClub.clubName}}" readonly>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="location">Location</label>
+                            <input type="text" class="form-control" id="location" name="location"
+                                placeholder="Enter location" value="{{myClub.location}}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email"
+                                value="{{myClub.email}}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter phone"
+                                value="{{myClub.phone}}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="regNo">Registration Number</label>
+                            <input type="text" class="form-control" id="regNo" name="regNo"
+                                placeholder="Enter registration number" value="{{myClub.regNo}}" readonly>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="isAdmin" name="isAdmin" {{#if
+                                myClub.isAdmin}}checked{{/if}} disabled>
+                            <label class="form-check-label" for="isAdmin">Is Admin</label>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+
+                   
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Section: Display List of Other Clubs -->
+        <div class="col-md-3">
+            <div class="card">
+                 <a type="button" class="btn btn-secondary" href="/club/addClubPage">Add New Club</a>
+                <div class="card-header">
+                    <h5 class="mb-0">List Clubs</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    {{#each allClubs}}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{clubName}}
+                        <img src="club_jersey_image_url" alt="Club Jersey" class="img-thumbnail" style="max-width: 50px;">
+                        <button type="button" class="btn btn-primary" onclick="joinClub('{{_id}}')">Join Club</button>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ... (Other HTML code) ... -->
+
+<!-- JavaScript for Add Member functionality -->
+<script>
+
+
+    // JavaScript functions for handling member search and addition
+    function searchMembers() {
+        // Implement member search logic and update the #searchResults element
+        // ...
+
+        // Example: Dummy data
+        const dummyData = [
+            { memberId: '1', memberName: 'John Doe' },
+            { memberId: '2', memberName: 'Jane Smith' },
+        ];
+
+        const searchResults = document.getElementById('searchResults');
+        searchResults.innerHTML = '';
+
+        dummyData.forEach(member => {
+            const memberDiv = document.createElement('div');
+            memberDiv.innerHTML = `<p>${member.memberName} <button class="btn btn-sm btn-primary" onclick="addMember('${member.memberId}')">Add</button></p>`;
+            searchResults.appendChild(memberDiv);
+        });
+    }
+
+    function addMember(memberId) {
+        // Implement logic to add the selected member to the Club
+        // ...
+
+        // Example: Dummy data
+        const addedMember = { memberId, memberName: 'John Doe' };
+
+        // Update the club details or show a success message
+        console.log('Added member:', addedMember);
+    }
+
+    const memberSearchInput = document.getElementById('memberSearch');
+    const searchResultsDropdown = document.getElementById('searchResults');
+
+    document.getElementById('searchMemberBtn').addEventListener('click', function () {
+        const searchText = memberSearchInput.value.trim();
+
+        // Clear previous search results
+        searchResultsDropdown.innerHTML = '';
+
+        // Fetch search results from the server
+        fetch(`/club/searchMembers?query=${searchText}`)
+            .then(response => response.json())
+            .then(data => {
+                // Populate dropdown with search results
+                data.forEach(member => {
+                    const option = document.createElement('div');
+                    option.className = 'dropdown-item';
+                    option.textContent = `${member.username} (${member.email})`;
+                    option.addEventListener('click', function () {
+                        // Set selected member in the input field
+                        memberSearchInput.value = member.username;
+                        document.getElementById("addMemberBtn").style.display = "block";
+                        document.getElementById("memberSearchId").value = member._id;
+                        const isAdminCheckbox = document.getElementById("memberSearchIsAdmin");
+                        const isAdminValue = isAdminCheckbox.checked ? true : false;
+                        document.getElementById("memberSearchIsAdmin").value = isAdminValue;
+
+                    });
+                    searchResultsDropdown.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching search results:', error));
+    });
+</script>
+
+<!-- ... (Other JavaScript code) ... -->
