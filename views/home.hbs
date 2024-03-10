@@ -45,9 +45,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <link rel="stylesheet" href="/stylesheets/profileStyle.css">
+   <link rel="stylesheet" href="/stylesheets/home.css">
 </head>
 
-<body>
+<body style="">
 
   <div class="container mt-4">
     </br>
@@ -119,27 +120,16 @@
             </div>
             <div class="card-footer">
               <div class="d-flex post-actions">
-                <form action="/post/like" method="post" id="likeForm">
+                <form id="frm{{_id}}" action="/post/like" method="post" id="likeForm">
                   <input type="hidden" name="postId" value="{{_id}}" />
 
-                  <a href="javascript:;" class="d-flex align-items-center text-muted mr-4{{#if isLiked}} liked{{/if}}"
-                    onclick="document.getElementById('likeForm').submit()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                      class="feather feather-heart icon-md">
-                      <path
-                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                      </path>
-                    </svg>
-                  </a>
+                  <a href="javascript:;" class="d-flex align-items-center text-muted mr-4"
+                    onclick="document.getElementById('frm{{_id}}').submit()">
+                    <span id=heart><i class="fa {{#if isLiked}} fa-heart{{else}}fa-heart-o{{/if}} fa-2x" aria-hidden="true"></i> </span>
                   <p class="d-none d-md-block ml-2"><button class="d-none" type="submit">Like</button></p>
-              {{likeCount}}
-                  
+                   <span class="badge badge-light">{{likeCount}}</span>
+                  </a>
                 </form>
-
-
-
-
                 <a href="javascript:;" class="d-flex align-items-center text-muted mr-4">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -160,6 +150,7 @@
                 </a>
               </div>
               <p class="mb-3 tx-14 m-1 float-left">{{description}}</p>
+              <p class="mb-3 tx-14 m-1 float-left">{{tags}}</p>
             </div>
 
           </div>
@@ -175,6 +166,7 @@
       const formattedDate = moment(dateString).fromNow();
       return formattedDate;
     }
+    
   </script>
 </body>
 

@@ -2,7 +2,7 @@
   <link rel="stylesheet" href="/stylesheets/createPost.css">
 
 
-<div class="container mt-5">
+<div class="container" style="margin: 7rem;">
   <div class="card">
     <div class="card-header">
       <h5 class="mb-0">Create Post</h5>
@@ -29,7 +29,8 @@
           <div class="container">
             <input type="file" id="file"  name="upload"  accept="image/*,video/*" hidden>
             <div class="img-area" data-img="">
-              <i class='bx bxs-cloud-upload icon'></i>
+              {{!-- <i class='bx bxs-cloud-upload icon'></i> --}}
+              <i class="fa fa-cloud-upload fa-5x" style="color: #0071ff;" aria-hidden="true"></i>
               <h3>Upload Image/Video</h3>              
             </div>
             <button type="button" class="select-image">Select File</button>

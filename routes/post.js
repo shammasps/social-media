@@ -41,6 +41,7 @@ router.get('/', async function(req, res, next) {
         likeCount: likeCount
       };
     });
+    console.log(postsWithMediaInfo)
     // render home page - and pass posts into home page
     res.render('home', { layout: 'layout', posts: postsWithMediaInfo });
     
@@ -138,6 +139,8 @@ router.post('/like', async (req, res) => {
   console.log("11111111")
 
   const { postId } = req.body;
+  console.log(postId,"postId")
+
   try {
     const post = await Post.findById(postId);
     if (!post) {
@@ -148,6 +151,7 @@ router.post('/like', async (req, res) => {
 
     // Check if the user has already liked the post
     const alreadyLikedIndex = post.likes.findIndex(like => like.likedBy.toString() === userId.toString());
+    console.log(alreadyLikedIndex,"alreadyLikedIndex")
     if (alreadyLikedIndex !== -1) {
       // User has already liked the post, remove the like
       post.likes.splice(alreadyLikedIndex, 1);
@@ -155,6 +159,7 @@ router.post('/like', async (req, res) => {
       // User hasn't liked the post, add the like
       post.likes.push({ likedBy: userId });
     }
+    console.log(post.likes,"post.likes")
 
     await post.save(); // Save the updated post
     return res.redirect("/post");
