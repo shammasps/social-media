@@ -128,8 +128,19 @@
 
   }
 
-  .liked {
+ 
+.fa-heart-o {
+    color: red;
+    cursor: pointer;
+  }
+  
+.fa-heart {
+    color: red;
+    cursor: pointer;
+  }
+
+  /* .liked {
     background-color: red;
     color: white;
-    /* Add any other styles as needed */
-}
+   
+} */    

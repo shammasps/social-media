@@ -1,6 +1,11 @@
 body{
-    background-color: #f4f7f6;
-    margin-top:20px;
+    /* background-color: #f4f7f6;
+    margin-top:20px;      */
+    background-image:
+    url(/images/bg-18.png);
+    height: 100vh;
+ 
+  background-size: contain;
 }
 .card {
     background: #fff;
@@ -53,8 +58,8 @@ body{
 }
 
 .people-list .chat-list img {
-    width: 45px;
-    border-radius: 50%
+    width: 40px;
+    height: 48px;
 }
 
 .people-list img {
@@ -74,13 +79,14 @@ body{
 
 .chat .chat-header {
     padding: 15px 20px;
-    border-bottom: 2px solid #f4f7f6
+    border-bottom: 3px solid #f4f7f6
 }
 
 .chat .chat-header img {
     float: left;
-    border-radius: 40px;
-    width: 40px
+    width: 40px;
+    height: 53px;
+
 }
 
 .chat .chat-header .chat-about {
@@ -111,8 +117,9 @@ body{
 }
 
 .chat .chat-history .message-data img {
-    border-radius: 40px;
-    width: 40px
+    
+    width: 40px;
+    height: 40px;
 }
 
 .chat .chat-history .message-data-time {
@@ -255,6 +262,24 @@ body{
     }
 }
 
-.height80{
+/* .height80{
     height:80vh;
+} */.image-right {
+    background-image: url('/images/bg-5.jpeg');
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 80vh;
+    position: relative;
+    overflow: hidden; /* Ensure overflow is hidden to prevent text from overflowing */
+}
+
+.image-right h4 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.5); /* Adjust the alpha value for background opacity */
+    padding: 20px; /* Set a fixed value for padding */
+    color: #ffffff; /* Set the text color as needed */
 }
