@@ -60,7 +60,7 @@
             <div class="card-header">
               <div class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center media mb-3">
-                  <img class="img-xs rounded-circle" src="{{profilePicture}}" alt="User">
+                  <img class="rounded-circle" style="width: 67px;height: 77px;" src="{{profilePicture}}" alt="User">
 
                   <div class=" media-body ml-2">
                     <p>{{postedByName}}</p>
@@ -106,13 +106,13 @@
               {{#if isImage}}
 
               <img class="img-fluid" style="max-height: 350px;" src="{{imageUrl}}" alt="{{title}}">
-              <p class="mb-3 tx-14">{{description}}</p>
+              
               {{else if isVideo}}
-              <video width="100%" height="auto" controls alt="{{title}}">
+              <video style="max-height: 350px;" width="100%" height="auto" controls alt="{{title}}">
                 <source src="{{imageUrl}}" type="video/mp4">
                 Your browser does not support the video tag.
               </video>
-              <p class="mb-3 tx-14">{{description}}</p>
+              
               {{else}}
               <!-- Handle other cases or leave it empty if you want to hide both -->
               {{/if}}
@@ -133,8 +133,8 @@
                     </svg>
                   </a>
                   <p class="d-none d-md-block ml-2"><button class="d-none" type="submit">Like</button></p>
-              
-                  {{likeCount}}
+              {{likeCount}}
+                  
                 </form>
 
 
@@ -159,6 +159,7 @@
                   <p class="d-none d-md-block ml-2">Share</p>
                 </a>
               </div>
+              <p class="mb-3 tx-14 m-1 float-left">{{description}}</p>
             </div>
 
           </div>

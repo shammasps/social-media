@@ -10,11 +10,11 @@
 
 <body>
 
-    <div class="container" style="margin-top: 10%;">
+    <div class="container-fluid" style="margin-top: 5%;">
         <div class="row clearfix">
             <div class="col-lg-12">
                 <div class="card chat-app">
-                    <div id="plist" class="people-list">
+                    <div id="plist" class="height80 people-list">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fa fa-search"></i></span>
@@ -35,16 +35,16 @@
                             {{/each}}
                         </ul>
                     </div>
-                    <div class="chat">
+                    <div class="height80 chat">
                         <div class="chat-header clearfix">
                             <div class="row">
                                 <div class="col-lg-6">
                                     <a href="javascript:void(0);" data-toggle="modal" data-target="#view_info">
-                                        <img src="../{{myUser.profilePicture}}" alt="avatar">
+                                        <img src="../{{recipient.profilePicture}}" alt="avatar">
                                     </a>
                                  <div class="chat-about">
-                                    <h6 class="m-b-0">{{ myUser.username }}</h6>
-                                    {{!-- <small>Last seen: {{ recipient.lastSeen }}</small> --}}
+                                    <h6 class="m-b-0">{{ recipient.username }}</h6>
+                                    <small>{{ recipient.userSkills }}</small>
                                 </div>
 
                                 </div>
@@ -83,8 +83,8 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fa fa-send"></i></span>
                                     </div>
-                                    <input type="hidden" name="from" value="{{ myUserId }}">
-                                    <input type="hidden" name="to" value="{{ recipientId }}">
+                                    <input type="hidden" name="from" value="{{ myUser._id }}">
+                                    <input type="hidden" name="to" value="{{ recipient._id }}">
                                     <input type="text" class="form-control" name="text"
                                         placeholder="Enter text here...">
                                     <div class="input-group-append">

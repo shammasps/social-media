@@ -1,4 +1,6 @@
 
+  <link rel="stylesheet" href="/stylesheets/createPost.css">
+
 
 <div class="container mt-5">
   <div class="card">
@@ -15,14 +17,23 @@
 
         <!-- File Upload Option -->
         <div class="form-group">
-          <label for="fileUpload">File Upload (Image/Video)</label>
-          <input type="file" class="form-control-file" name="upload" id="fileUpload" accept="image/*,video/*">        </div>
+          {{!-- <label for="fileUpload">File Upload (Image/Video)</label> --}}
+          {{!-- <input type="file" class="form-control-file" name="upload" id="fileUpload" accept="image/*,video/*">        </div>
 
         <!-- File Preview (No JavaScript) -->
         <div class="form-group">
           <label for="filePreview">File Preview</label>
           <img id="filePreview" class="img-fluid" style="height: 500px;" alt="File Preview">
-        </div>
+        </div> --}}
+
+          <div class="container">
+            <input type="file" id="file"  name="upload"  accept="image/*,video/*" hidden>
+            <div class="img-area" data-img="">
+              <i class='bx bxs-cloud-upload icon'></i>
+              <h3>Upload Image/Video</h3>              
+            </div>
+            <button type="button" class="select-image">Select File</button>
+          </div>
 
         <!-- Description Textarea -->
         <div class="form-group">
@@ -47,19 +58,45 @@
 </div>
 
 <script>
-  document.getElementById('fileUpload').addEventListener('change', function () {
-    const fileInput = this;
-    const filePreview = document.getElementById('filePreview');
-    const files = fileInput.files;
 
-    if (files.length > 0) {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        filePreview.src = e.target.result;
-      };
-      reader.readAsDataURL(files[0]);
-    } else {
-      filePreview.src = '';
+
+const selectImage = document.querySelector('.select-image');
+const inputFile = document.querySelector('#file');
+const imgArea = document.querySelector('.img-area');
+
+selectImage.addEventListener('click', function () {
+    inputFile.click();
+});
+
+inputFile.addEventListener('change', function () {
+    const mediaFile = this.files[0];
+
+    const reader = new FileReader();
+    reader.onload = () => {
+        const allMedia = imgArea.querySelectorAll('img, video');
+        allMedia.forEach(item => item.remove());
+
+        const mediaUrl = reader.result;
+        if (mediaFile.type.startsWith('image/')) {
+            // Display image
+            const img = document.createElement('img');
+            img.src = mediaUrl;
+            imgArea.appendChild(img);
+        } else if (mediaFile.type.startsWith('video/')) {
+            // Display video
+            const video = document.createElement('video');
+            video.src = mediaUrl;
+            video.setAttribute('controls', 'controls');
+            imgArea.appendChild(video);
+        }
+
+        imgArea.classList.add('active');
+        imgArea.dataset.img = mediaFile.name;
+    };
+
+    if (mediaFile) {
+        reader.readAsDataURL(mediaFile);
     }
-  });
+});
+
 </script>

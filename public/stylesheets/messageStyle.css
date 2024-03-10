@@ -254,3 +254,7 @@ body{
         overflow-x: auto
     }
 }
+
+.height80{
+    height:80vh;
+}

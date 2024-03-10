@@ -187,10 +187,10 @@
 
                         {{#if isImage}}
 
-                        <img class="img-fluid" style="height: 500px;" src="{{imageUrl}}" alt="{{title}}">
+                        <img class="img-fluid" style="max-height: 350px;" src="{{imageUrl}}" alt="{{title}}">
                         <p class="mb-3 tx-14">{{description}}</p>
                         {{else if isVideo}}
-                        <video width="100%" height="500px" controls alt="{{title}}">
+                        <video  style="max-height: 350px;" width="100%" height="500px" controls alt="{{title}}">
                           <source src="{{imageUrl}}" type="video/mp4">
                           Your browser does not support the video tag.
                         </video>
