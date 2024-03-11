@@ -21,7 +21,7 @@ router.get('/my', async (req, res) => {
         const club = await Club.findOne({ 'members.memberId': userId }).populate('members.memberId', 'username');
         if(club)
 {        var has = club.members?.find(x=> x.isAdmin && x.memberId._id.toString() == userId.toString());
-        console.log(has,"has",club.members,"club.members")
+        
         club.isAdmin = has ? true : false;
 }
         
@@ -166,6 +166,7 @@ router.post('/removeMember', async (req, res) => {
         const { memberId } = req.body;
         console.log(req.body)
         const club = await Club.findOne({ 'members.memberId': new ObjectId(memberId.toString()) });
+        
         console.log(club,"clubclubclubclub")
         if (club && club.members) 
         {
@@ -180,11 +181,30 @@ router.post('/removeMember', async (req, res) => {
             if (club.members && club.members.length > 1) {
                 console.log("removeClub", memberId)
                 // Update the Club's members array to remove the specified member
-                const updatedClub = await Club.findByIdAndUpdate(
-                    club._id,
-                    { $pull: { members: { _id: memberId } } },
-                    { new: true }
-                );
+                                
+                try {
+                    
+                    const memberIndex = club.members.findIndex(cc => cc.memberId.toString() === memberId.toString());
+                
+                    if (memberIndex !== -1) {
+                        // Remove the member from the members array
+                        club.members.splice(memberIndex, 1);
+                
+                        // Save the updated club object to the database
+                        const savedClub = await club.save();
+                
+                        console.log("Member removed. Updated Club:", savedClub);
+                
+                        // Optionally, fetch the updated document after the save
+                        const fetchedClub = await Club.findById(club._id);
+                        console.log("Fetched Club", fetchedClub);
+                    } else {
+                        console.log("Member not found in the club's members array.");
+                    }
+                } catch (error) {
+                    console.error("Error updating club:", error);
+                }
+                
             }
         }
         res.redirect("/club/my");

@@ -250,7 +250,10 @@ async function myfollowers(req, res, total){
     user.followerList.map(follower => ({ follower, user }))
   );
   //const sortedFollowers = allFollowers.sort((a, b) => b.follower.followedOn - a.follower.followedOn);
-  const top10Followers = allFollowers.slice(0, total);
+
+  let uniqueFollowers = removeDuplicates(allFollowers, '_id');
+
+  const top10Followers = uniqueFollowers.slice(0, total);
 
  const followersWithData= top10Followers.map(x=>{
     return {
@@ -261,9 +264,21 @@ async function myfollowers(req, res, total){
       isAlreadyFollowing:me?.followerList.find(y=> y.userId.toString() == x.user._id.toString()) ? true : false
     };
   });    
-
+  top10Followers
   console.log(followersWithData);
   return followersWithData;
 }
 
+
+// Function to remove duplicates based on the _id field
+function removeDuplicates(array, field) {
+  let uniqueValues = [];
+  return array.filter(item => {
+      if (uniqueValues.indexOf(item[field]) === -1) {
+          uniqueValues.push(item[field]);
+          return true;
+      }
+      return false;
+  });
+}
 module.exports = router;

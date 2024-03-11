@@ -1,0 +1,187 @@
+generate data for my sports club database
+check below sample collections
+provide more data - and suggest other data generate ai tool if you can;t possible
+provide atleast 20 records for each collection
+///Sample user collection 
+// provide profilePicture  image url should be a valid url from internet
+// follower userId should be one of the Users id inserted in user collection but not current user id
+// generate data for other field 
+// use only this password for all users :"$2b$10$hvLbPtuNDNRnYPAXWi1g9.rzDYF/OIpJ35Vs2vdGCAFzDrsWfTv4q"
+// skills should be one of these "football-back",
+    // "football-defence",
+    // "football-forward",
+    // "football-gk",
+    // "football-midfielder",
+    // "football-striker",
+    // "football-winger",
+    // "cricket-batsman",
+    // "cricket-bowler",
+    // "cricket-allrounder",
+[{
+  "_id": {
+    "$oid": "65ec2ad002a0d20c00124127"
+  },
+  "firstname": "Shammas",
+  "lastname": "PS",
+  "username": "shammas",
+  "email": "shammas@gmail.com",
+  "password": "$2b$10$hvLbPtuNDNRnYPAXWi1g9.rzDYF/OIpJ35Vs2vdGCAFzDrsWfTv4q",
+  "gender": "male",
+  "birthday": "2002-09-09",
+  "followerList": [
+    {
+      "userId": {
+        "$oid": "65eec03c4ac31ebae180fb47"
+      },
+      "followedOn": {
+        "$date": "2024-03-11T08:31:44.311Z"
+      },
+      "_id": {
+        "$oid": "65eec1704ac31ebae180fbd8"
+      }
+    },
+    {
+      "userId": {
+        "$oid": "65ec3018ee069e486bd81d6d"
+      },
+      "followedOn": {
+        "$date": "2024-03-11T16:49:23.239Z"
+      },
+      "_id": {
+        "$oid": "65ef36132809e7f5d237a780"
+      }
+    },
+    {
+      "userId": {
+        "$oid": "65ec79a428e58fbc294880f3"
+      },
+      "followedOn": {
+        "$date": "2024-03-11T16:49:35.181Z"
+      },
+      "_id": {
+        "$oid": "65ef361f2809e7f5d237a78f"
+      }
+    }
+  ],
+  "__v": 3,
+  "profilePicture": "uploads/profile/profilePhoto-1710052324214-532950908.jpg",
+  "aboutMe": "iam shammas",
+  "phone": "7034617431",
+  "skills": [
+    "football-forward"
+  ]
+},
+{
+    "_id": {
+      "$oid": "65ec3018ee069e486bd81d6d"
+    },
+    "firstname": "Hemin",
+    "lastname": "PS",
+    "username": "Hemin unni",
+    "email": "hemin@gmail.com",
+    "password": "$2b$10$u7kVOKm6TNv1hX80regG1.CEq9CZQJ4fW2RFWoE6EOecHZwtRVtTO",
+    "gender": "male",
+    "birthday": "",
+    "followerList": [
+      {
+        "userId": {
+          "$oid": "65ec2ad002a0d20c00124127"
+        },
+        "followedOn": {
+          "$date": "2024-03-09T19:00:45.158Z"
+        },
+        "_id": {
+          "$oid": "65ecb1dd4bd13d039ecf14ce"
+        }
+      }
+    ],
+    "__v": 1,
+    "profilePicture": "uploads/profile/profilePhoto-1709977852532-971339361.jpg",
+    "aboutMe": "Son of Sharafu",
+    "phone": "00000000000000000",
+    "skills": [
+      "cricket-batsman",
+      "cricket-bowler"
+    ]
+  }]
+
+
+
+  /// below Sample CLUB collection  
+// memberId should be one of the Users id inserted in user collection
+// consider only one club is allowed for one user and atleat one admin required for one club
+// generate dummy data for other fields too
+  {
+    "_id": {
+      "$oid": "65ede68c512edd971f58b8f6"
+    },
+    "clubName": "Chalengers",
+    "location": "Chalengers",
+    "email": "Chalengers@gmail.com",
+    "phone": "545788",
+    "regNo": "45",
+    "members": [
+      {
+        "memberId": {
+          "$oid": "65ec79a428e58fbc294880f3"
+        },
+        "isAdmin": true,
+        "_id": {
+          "$oid": "65ede68c512edd971f58b8f7"
+        }
+      },
+      {
+        "memberId": {
+          "$oid": "65ec2ad002a0d20c00124127"
+        },
+        "isAdmin": false,
+        "_id": {
+          "$oid": "65ef4b3eb74b686cb077f1c6"
+        }
+      },
+      {
+        "memberId": {
+          "$oid": "65ec3018ee069e486bd81d6d"
+        },
+        "isAdmin": false,
+        "_id": {
+          "$oid": "65ef4b46b74b686cb077f1d3"
+        }
+      }
+    ],
+    "__v": 2,
+    "jersyPhoto": "uploads/profile/jersyPhoto-1710089888765-169456599.png"
+  }
+
+//////////////////////////////////////////////////
+
+  ///Sample Post collection
+// provide more post image url should be a valid url from internet
+// images should be related to sports
+// postedby should be one of the Users id inserted in user collection
+// likedBy should be one of the Users id inserted in user collection
+// generate data for other field 
+  {
+    "_id": {
+      "$oid": "65ef4cd1b74b686cb077f1f7"
+    },
+    "title": "Messi and pep",
+    "description": "coching or planning ?",
+    "tags": [],
+    "imageUrl": "/uploads/upload-1710181585516-22948632.jpeg",
+    "postedBy": {
+      "$oid": "65ec79a428e58fbc294880f3"
+    },
+    "postedDate": {
+      "$date": "2024-03-11T18:26:25.530Z"
+    },
+    "likes": [ {
+        "likedBy": {
+          "$oid": "65ec2ad002a0d20c00124127"
+        },
+        "_id": {
+          "$oid": "65ef4db7b44136faee0b4108"
+        }
+      }],
+    "__v": 0
+  }

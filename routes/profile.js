@@ -2,6 +2,8 @@
 var express = require('express');
 var router = express.Router();
 const User = require('../models/userModel');
+const Club = require('../models/clubModel');
+
 const Post = require('../models/postModel');
 const data = require('../models/data');
 const multer = require('multer');
@@ -43,7 +45,8 @@ router.get('/', async (req, res) => {
     // var isFollowingMe = user.followerList?.length ?? 0;
     // var isFollower = await (await myfollowers(req,res,10000)).length;
 
-
+    user.club = await Club.findOne({"members.memberId": user._id});
+    console.log("user.club",user.club)
     // Assuming user.skills is an array of selected skill values
     user.userSkills  = user.skills?.map(x => x);
     user.userSkills  = data.sportsSkills.filter(x=> user.userSkills.indexOf(x.value)>-1).map(y=> y.text);

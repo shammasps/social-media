@@ -34,13 +34,22 @@
                 </div>
 
                 <div class="ms-3" style="margin-top: 88px; margin-left: 4%; color: black;">
-                  <h5>{{user.username}}</h5>
-                  <p class="p">{{user.userSkills}}</p>
+                 <div class="user-profile">
+                  <h5 class="username">{{user.username}}</h5>
+                  <p class="user-skills">{{user.userSkills}}</p>
+                  {{#if user.club}}
+                  <div class="club-info d-flex justify-content">
+                      <img src="{{user.club.jersyPhoto}}" alt="Club Logo" class="club-logo"/><p class="club-name">{{user.club.clubName}}</p>
+                      
+                  </div>
+                  {{/if}}
+              </div>
+
                 </div>
               </div>
               <div class="p-4 text-black">
                 <div class="row ">
-                  <div class="col-8">
+                  <div class="col">
 
                     {{#if isMyProfile}}
                     <!-- If it's the user's own profile, show the edit button -->
@@ -78,18 +87,23 @@
 
                   </div>
 
-                  <div class="col-1">
-                    <p class="mb-1 h5">{{myPost.length}}</p>
-                    <p class="small text-muted mb-0">Photos</p>
-                  </div>
-                  <div class="col-1" class="px-3">
-                    <p class="mb-1 h5">{{followers}}</p>
-                    <p class="small text-muted mb-0">Followers</p>
-                  </div>
-                  <div class="col-1">
-                    <p class="mb-1 h5">{{following}}</p>
-                    <p class="small text-muted mb-0">Following</p>
-                  </div>
+                 <div class="col-auto d-flex justify-content">
+                  <div class="stats-item">
+                      <p class="mb-1 h5">{{myPost.length}}</p>
+                      <p class="small text-muted mb-0">Photos</p>
+                  </div>    
+
+    <div class="stats-item">
+        <p class="mb-1 h5">{{followers}}</p>
+        <p class="small text-muted mb-0">Followers</p>
+    </div>
+
+    <div class="stats-item">
+        <p class="mb-1 h5">{{following}}</p>
+        <p class="small text-muted mb-0">Following</p>
+    </div>
+</div>
+
 
                 </div>
               </div>

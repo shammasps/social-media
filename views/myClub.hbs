@@ -28,8 +28,8 @@
                         <li class="list-group-item">
                             {{this.memberId.username}} {{#if this.isAdmin}} (Admin) {{/if}}
 
-                            <form class="d-inline" action="/club/removeMember" method="post">
-                                <input type="hidden" name="memberId" value="{{this._id}}">
+                            <form class="d-inline" action="/club/removeMember" method="post">                            
+                                <input type="hidden" name="memberId" value="{{this.memberId._id}}">
                                 <input type="hidden" name="clubId" value="{{myClub._id}}">
                                 <button type="submit" class="btn btn-sm btn-danger">Remove</button>
                             </form>

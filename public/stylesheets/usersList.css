@@ -1,6 +1,15 @@
 body{
     margin-top:20px;
-    background:#FAFAFA;    
+    /* background:#FAFAFA;   */
+    /* background-image:
+        url(/images/bg-6.jpeg);
+        height: 100vh;
+        
+      background-size: contain; */
+
+      background: #B6DBF6;
+        
+     
 }
 .people-nearby .google-maps{
     background: #f8f8f8;
@@ -17,10 +26,18 @@ body{
   }
   
   .people-nearby .nearby-user{
-    padding: 20px 0;
+    padding: 20px 10px;
     border-top: 1px solid #f1f2f2;
     border-bottom: 1px solid #f1f2f2;
     margin-bottom: 20px;
+    background-color: white;
+  }
+  .nearby-user{
+    padding: 20px 10px;
+    border-top: 1px solid #f1f2f2;
+    border-bottom: 1px solid #f1f2f2;
+    margin-bottom: 20px;
+    background-color: white;
   }
   
   img.profile-photo-lg{
