@@ -24,7 +24,7 @@ router.get('/my', async (req, res) => {
         console.log(has,"has",club.members,"club.members")
         club.isAdmin = has ? true : false;
 }
-        console.log(club)
+        
         // Pass the club details to the template
         res.render('myClub', { layout: 'layout', myClub: club , allClubs: clubs, message:message});
     } catch (error) {
@@ -164,21 +164,28 @@ router.post('/removeMember', async (req, res) => {
 
         //
         const { memberId } = req.body;
-        const club = await Club.findOne({ 'members.memberId': memberId });
-        var admins = club.members?.filter(x=> x.isAdmin);
-        var isMeAdmin = club.members?.find(x=> x.memberId.toString() == memberId.toString());
-        if(admins.length ==1 && isMeAdmin){
-            message = "Should not remove, Only one admin"
-            return res.redirect("/club/my");
-        }
-        
-        if(club.members && club.members.length>1){
-            // Update the Club's members array to remove the specified member
-            const updatedClub = await Club.findByIdAndUpdate(
-                club._id,
-                { $pull: { members: { _id: memberId } } },
-                { new: true }
-            );
+        console.log(req.body)
+        const club = await Club.findOne({ 'members.memberId': new ObjectId(memberId.toString()) });
+        console.log(club,"clubclubclubclub")
+        if (club && club.members) 
+        {
+            var admins = club.members?.filter(x => x.isAdmin);
+            var isMeAdmin = club.members?.find(x => x.memberId.toString() == memberId.toString() && x.isAdmin);
+            if (admins.length == 1 && isMeAdmin) {
+                message = "Should not remove, Only one admin"
+                console.log(message)
+                return res.redirect("/club/my");
+            }
+
+            if (club.members && club.members.length > 1) {
+                console.log("removeClub", memberId)
+                // Update the Club's members array to remove the specified member
+                const updatedClub = await Club.findByIdAndUpdate(
+                    club._id,
+                    { $pull: { members: { _id: memberId } } },
+                    { new: true }
+                );
+            }
         }
         res.redirect("/club/my");
     } catch (error) {
