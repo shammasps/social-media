@@ -29,8 +29,8 @@ router.get('/', async (req, res) => {
       var likeCount=  post.likes?.length ?? 0;
       return {
         ...post.toObject(),
-        isImage: post.imageUrl.endsWith('.jpg') || post.imageUrl.endsWith('.png'),
-        isVideo: post.imageUrl.endsWith('.mp4') || post.imageUrl.endsWith('.webm'),
+        isImage: post.imageUrl.endsWith('.jpg') || post.imageUrl.endsWith('.png') || post.imageUrl?.endsWith('.jpeg'),
+        isVideo: post.imageUrl.endsWith('.mp4') || post.imageUrl.endsWith('.webm') || post.imageUrl?.endsWith('.3gp'),
         profilePicture:  user?.profilePicture,
         postedByName :user?.username,
         isLiked:isLiked > -1 ? true : false,

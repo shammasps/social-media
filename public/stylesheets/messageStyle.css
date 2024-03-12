@@ -292,4 +292,13 @@ body{
     text-align: center;
   }
 
-
+  .height60{
+    min-height:40vh;
+    max-height: 60vh;
+    overflow: auto;
+}
+.height80{
+    min-height:70vh;
+    max-height: 80vh;
+    overflow: auto;
+}
