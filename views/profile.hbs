@@ -197,13 +197,13 @@
                         {{#if isImage}}
 
                         <img class="img-fluid" style="max-height: 350px;" src="{{imageUrl}}" alt="{{title}}">
-                        <p class="mb-3 tx-14">{{description}}</p>
+                        
                         {{else if isVideo}}
                         <video  style="max-height: 350px;" width="100%" height="500px" controls alt="{{title}}">
                           <source src="{{imageUrl}}" type="video/mp4">
                           Your browser does not support the video tag.
                         </video>
-                        <p class="mb-3 tx-14">{{description}}</p>
+                        
                         {{else}}
                         <!-- Handle other cases or leave it empty if you want to hide both -->
                         {{/if}}
@@ -245,6 +245,8 @@
                             <p class="d-none d-md-block ml-2">Share</p>
                           </a>
                         </div>
+                        <p class="mb-3 tx-14 m-1 float-left">{{description}}</p>
+                        <p class="mb-3 tx-14 m-1 float-left">{{tags}}</p>
                       </div>
 
                     </div>
